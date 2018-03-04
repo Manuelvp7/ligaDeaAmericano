@@ -6,9 +6,13 @@ import DAOimpl.PersonaDAOImpl;
 import interfaces.VistaControladorAdministrarUsuarios;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 
 import modelo.Persona;
@@ -23,19 +27,36 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
 	private Persona unaPersona ;
 	private java.sql.Date fechaSQL;
         private Conexion conn;
+        private ResultSet rs;
+        
 	//private ConsultorBD consultor;
 	//private InsertorBD insertor;
         private PersonaDAOImpl personaDAOImpl;
 	
 	public ControladorPersona(){
-		
+	
             unaPersona = new Persona();
             panelUsuariosDelSistema = new panelAdminUsuarioDelSistema(this);
             personaDAOImpl = new PersonaDAOImpl();
             conn = new Conexion();
-            conn.crearConexion();
+            cargarTablaPersona();
+            
             	
 	}
+        
+        public void cargarTablaPersona(){
+            
+           
+            List<Persona> personas;
+            try {
+                personas = personaDAOImpl.load(conn.crearConexion());
+                panelUsuariosDelSistema.actualizarTabla(personas);
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+        }
 
     public void agregar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno,int edad, Date fechaNacimiento) {
         
@@ -64,14 +85,36 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
        }
 
     @Override
-    public void borrar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad, Date fechaNacimiento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void borrar(String curp) {
+        
+     
+            try {
+                   PersonaKey pk = new PersonaKey();
+                   pk.setCurp(curp);
+                   personaDAOImpl.delete(pk, conn.crearConexion());
+                   cargarTablaPersona();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }
 
     @Override
     public void actualizar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad, Date fechaNacimiento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        
+        
+            try {
+                
+                Persona unaPersona = new Persona(curp, Nombre, ApellidoPaterno, ApellidoMaterno, edad, fechaNacimiento);
+                personaDAOImpl.update(unaPersona, conn.crearConexion());
+                cargarTablaPersona();
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
     }
+    
+
 
 
 	

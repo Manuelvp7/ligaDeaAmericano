@@ -18,6 +18,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.ArrayList;
 import DAO.PersonaDAO;
+import java.util.LinkedList;
 
 /**
  * This class provides methods to populate DB Table of Persona
@@ -37,6 +38,10 @@ public class PersonaDAOImpl implements PersonaDAO {
         + "CURP, nombre, paterno, materno, edad, fechaNacimiento "
         + "FROM Persona WHERE "
         + "CURP = ?";
+    
+    private static final String SQL_SELECT_ALL =
+            "SELECT"
+            + "* FROM Persona";
 
     /* SQL to update data */
     private static final String SQL_UPDATE =
@@ -102,6 +107,25 @@ public class PersonaDAOImpl implements PersonaDAO {
             close(ps);
         }
     }
+    
+        public List load(Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(SQL_SELECT_ALL);
+            rs = ps.executeQuery();
+            List<Persona> results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+    
+    
 
     /**
      * Update a record in Database.
@@ -151,7 +175,7 @@ public class PersonaDAOImpl implements PersonaDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
-    protected List<Persona> getResults(ResultSet rs) throws SQLException {
+    public List<Persona> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Persona>();
         while (rs.next()) {
             Persona bean = new Persona();

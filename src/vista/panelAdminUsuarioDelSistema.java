@@ -8,6 +8,10 @@ package vista;
 import interfaces.VistaControladorAdministrarUsuarios;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import modelo.Persona;
 
 
 /**
@@ -16,21 +20,48 @@ import java.text.SimpleDateFormat;
  */
 public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
     
-    VistaControladorAdministrarUsuarios vcau;
+    private VistaControladorAdministrarUsuarios vcau;
+    private DefaultTableModel modelo;
 
     /**
      * Creates new form login
      */
     public panelAdminUsuarioDelSistema(VistaControladorAdministrarUsuarios vCAU) {
         
-        this.vcau = vCAU;
-        
+        this.vcau = vCAU;        
         initComponents();
+        modelo = (DefaultTableModel) tablaDePersonas.getModel();
+        tablaDePersonas.setDefaultEditor(Object.class, null);
     }
 
     public panelAdminUsuarioDelSistema() {
 
     }
+    
+    public void actualizarTabla(List<Persona> personas){
+        
+        modelo.setRowCount(0);
+			
+	Object[] registro = new Object[6];
+		
+	for(int i=0;i<personas.size();i++){
+			
+			registro[0] = personas.get(i).getCurp();
+			registro[1] = personas.get(i).getNombre();
+			registro[2] = personas.get(i).getPaterno();
+			registro[3] = personas.get(i).getMaterno();
+			registro[4] = personas.get(i).getEdad();
+			registro[5] = personas.get(i).getFechanacimiento();
+			
+			modelo.addRow(registro);
+			
+		}
+		tablaDePersonas.setModel(modelo);
+		
+        
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,7 +89,7 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtEdad = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaDePersonas = new javax.swing.JTable();
         btnAgrega = new javax.swing.JButton();
         btnBorrar = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
@@ -131,20 +162,35 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(153, 51, 0));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaDePersonas.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        tablaDePersonas.setForeground(new java.awt.Color(153, 51, 0));
+        tablaDePersonas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "CURP", "NOMBRE", "PATERNO", "MATERNO", "EDAD", "FECHA DE NACIMIENTO"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaDePersonas.setCellSelectionEnabled(true);
+        tablaDePersonas.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                tablaDePersonasAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        tablaDePersonas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaDePersonasMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablaDePersonas);
 
         btnAgrega.setBackground(new java.awt.Color(153, 51, 0));
         btnAgrega.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -160,6 +206,11 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
         btnBorrar.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         btnBorrar.setForeground(new java.awt.Color(255, 255, 255));
         btnBorrar.setText("Borrar");
+        btnBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBorrarActionPerformed(evt);
+            }
+        });
 
         btnActualizar.setBackground(new java.awt.Color(153, 51, 0));
         btnActualizar.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -182,39 +233,36 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCURP, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtApellidoMaterno)
-                                        .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtEdad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(btnAgrega)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnBorrar)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnActualizar))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel8))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 484, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
+                    .addComponent(jLabel1)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel3)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel5))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtCURP, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtApellidoMaterno)
+                                    .addComponent(txtApellidoPaterno, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtEdad, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(btnAgrega)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnBorrar)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnActualizar))
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(dateChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel8)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 793, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -254,10 +302,10 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
                     .addComponent(btnBorrar)
                     .addComponent(btnActualizar))
                 .addGap(37, 37, 37))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtCURP.getAccessibleContext().setAccessibleName("txtCURP");
@@ -266,9 +314,9 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 29, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,7 +327,9 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,6 +366,7 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
         fecha = new Date(Integer.parseInt(s[0])-1900, Integer.parseInt(s[1])-1, Integer.parseInt(s[2]));
         
         vcau.agregar(txtCURP.getText(), txtNombre.getText(),txtApellidoPaterno.getText(),txtApellidoMaterno.getText(),Integer.parseInt( txtEdad.getText()),fecha);
+        vcau.cargarTablaPersona();
     }//GEN-LAST:event_btnAgregaActionPerformed
 
     private void txtCURPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCURPActionPerformed
@@ -323,8 +374,51 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_txtCURPActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        // TODO add your handling code here:
+        
+        SimpleDateFormat dcn = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dcn.format(dateChooser.getDate() );
+        String []s = date.split("-");
+    
+        Date fecha;
+        
+        fecha = new Date(Integer.parseInt(s[0])-1900, Integer.parseInt(s[1])-1, Integer.parseInt(s[2]));
+        
+        vcau.actualizar(txtCURP.getText(),txtNombre.getText(),txtApellidoPaterno.getText(),txtApellidoMaterno.getText(),
+                Integer.parseInt(txtEdad.getText()),fecha);
     }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void tablaDePersonasAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_tablaDePersonasAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tablaDePersonasAncestorAdded
+
+    private void tablaDePersonasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDePersonasMouseClicked
+        
+        int i  = tablaDePersonas.getSelectedRow();
+				
+	
+				
+	txtCURP.setText((String)tablaDePersonas.getValueAt(i, 0)); 
+	txtNombre.setText((String)tablaDePersonas.getValueAt(i, 1));
+        txtApellidoPaterno.setText((String)tablaDePersonas.getValueAt(i, 2));
+	txtApellidoMaterno.setText((String)tablaDePersonas.getValueAt(i, 3)); 
+        txtEdad.setText(String.valueOf(tablaDePersonas.getValueAt(i, 4)) );
+        
+        
+        String s = String.valueOf(tablaDePersonas.getValueAt(i, 5)) ;
+        String [] st = s.split("-");
+    
+        java.util.Date fecha = new Date(Integer.parseInt(st[0])-1900, Integer.parseInt(st[1])-1, Integer.parseInt(st[2]));
+        
+	dateChooser.setDate(fecha);
+        
+               
+    }//GEN-LAST:event_tablaDePersonasMouseClicked
+
+    private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
+        
+        vcau.borrar(txtCURP.getText());
+        
+    }//GEN-LAST:event_btnBorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -381,7 +475,7 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaDePersonas;
     private javax.swing.JTextField txtApellidoMaterno;
     private javax.swing.JTextField txtApellidoPaterno;
     private javax.swing.JTextField txtCURP;
@@ -389,4 +483,8 @@ public class panelAdminUsuarioDelSistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtNombre;
     private org.jdatepicker.impl.UtilCalendarModel utilCalendarModel1;
     // End of variables declaration//GEN-END:variables
+
+    
+    
+    
 }
