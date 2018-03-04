@@ -7,6 +7,8 @@
 
 package modelo;
 
+import java.util.Date;
+
 /*
  * For Table Persona
  */
@@ -30,6 +32,23 @@ public class Persona implements java.io.Serializable, Cloneable {
 
     /* fechaNacimiento */
     protected java.util.Date fechanacimiento;
+    
+    
+    public Persona (String curp,String nombre, String paterno, String materno, int edad, Date fechanacimiento){
+        
+        _key.setCurp(curp);
+        this.curp = curp;
+        this.nombre = nombre;
+        this.paterno = paterno;
+        this.materno = materno;
+        this.edad = edad;
+        this.fechanacimiento = fechanacimiento;
+        
+    }
+
+    public Persona() {
+        
+    }
 
     /* Return the key object. */
     public PersonaKey getKeyObject() {

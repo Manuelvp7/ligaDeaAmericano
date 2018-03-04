@@ -1,96 +1,80 @@
-package lmfa.src.control;
+package control;
 
+import Conexiones.Conexion;
+import DAO.PersonaDAO;
+import DAOimpl.PersonaDAOImpl;
+import interfaces.VistaControladorAdministrarUsuarios;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import lmfa.src.interfaces.PersonaInterface;
-import lmfa.src.modelo.Persona;
 
-import lmfa.src.DAO.PersonaDAO;
-import lmfa.src.vista.PanelPersona;
+import modelo.Persona;
+import modelo.PersonaKey;
 
-public class ControladorPersona implements PersonaInterface {
 
-	private PanelPersona miPanelPersona;
-	private PersonaDAO pDAO;
+import vista.panelAdminUsuarioDelSistema;
+
+public class ControladorPersona implements VistaControladorAdministrarUsuarios{
+
+	private panelAdminUsuarioDelSistema panelUsuariosDelSistema;
+	private Persona unaPersona ;
 	private java.sql.Date fechaSQL;
+        private Conexion conn;
 	//private ConsultorBD consultor;
 	//private InsertorBD insertor;
-	private Persona unaPersona;
+        private PersonaDAOImpl personaDAOImpl;
 	
 	public ControladorPersona(){
 		
-		miPanelPersona = new PanelPersona(this);
-		pDAO = new PersonaDAO();
-		
-		unaPersona = new Persona();
-		miPanelPersona.updateTabla(pDAO.getPersonas());
-		
+            unaPersona = new Persona();
+            panelUsuariosDelSistema = new panelAdminUsuarioDelSistema(this);
+            personaDAOImpl = new PersonaDAOImpl();
+            conn = new Conexion();
+            conn.crearConexion();
+            	
 	}
+
+    public void agregar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno,int edad, Date fechaNacimiento) {
+        
+            try {
+                
+                unaPersona = new Persona(curp,Nombre,ApellidoPaterno,ApellidoMaterno,edad,fechaNacimiento);
+                
+
+                personaDAOImpl.create(unaPersona, conn.crearConexion());
+            } catch (SQLException ex) {
+                Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }
+
+    
+
+
+       public void MostrarPanelAdministradorDeUsuariosDelSistema(){
+           
+           panelUsuariosDelSistema.setVisible(true);
+       }
+       public void ocultarPanelAdministradorDeUsuariosDelSistema(){
+           
+           panelUsuariosDelSistema.setVisible(true);
+           
+       }
+
+    @Override
+    public void borrar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad, Date fechaNacimiento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void actualizar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad, Date fechaNacimiento) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+
 	
-	public PanelPersona getPanelPersona() {
-		return miPanelPersona;
-	}
-	/*
-	@Override
-	public void recibeCURP(String curp) {
-		
-		unaPersona.setCurp(curp);
-	}
-
-	@Override
-	public void recibeNombre(String nombre) {
-		unaPersona.setNombre(nombre);
-		
-	}
-
-	@Override
-	public void recibeApellidoPaterno(String apellidoPaterno) {
-		unaPersona.setApellidoPaterno(apellidoPaterno);
-		
-	}
-
-	@Override
-	public void recibeApellidoMaterno(String apellidoMaterno) {
-
-		unaPersona.setApellidoMaterno(apellidoMaterno);
-	}
-
-	@Override
-	public void recibeFechaNacimiento(Date fechaDeNacimiento) {
-		unaPersona.setFechaDeNacimiento(fechaDeNacimiento);
-		
-	}
-
-	@Override
-	public void recibeEdad(int edad) {
-		unaPersona.setEdad(edad);
-		
-	}*/
-
-	@Override
-	public void insertarPersona(String curp, String nombre, String apellidoPaterno, String apellidoMaterno,
-			Date fechaDeNacimiento, int edad) {
-		//fechaSQL = new java.sql.Date(fechaDeNacimiento.getTime()); 
-		pDAO.insertarPersona(curp, nombre, apellidoPaterno, apellidoMaterno, fechaDeNacimiento, edad);
-		miPanelPersona.updateTabla(pDAO.getPersonas());
-		
-	}
-	@Override
-	public void actualizarPersona(String curp, String nombre, String apellidoPaterno, String apellidoMaterno,
-			Date fechaDeNacimiento, int edad) {
-		
-		//fechaSQL = new java.sql.Date(fechaDeNacimiento.getTime()); 
-		pDAO.actualizarPersona(curp, nombre, apellidoPaterno, apellidoMaterno, fechaDeNacimiento, edad);
-		miPanelPersona.updateTabla(pDAO.getPersonas());
-			
-		
-	}
-	@Override
-	public void borrarPersona(String curp) {
-		pDAO.borrarPersona(curp);
-		miPanelPersona.updateTabla(pDAO.getPersonas());
-		
-	}
 
 
 

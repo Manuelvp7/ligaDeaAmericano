@@ -23,6 +23,8 @@ import DAO.PersonaDAO;
  * This class provides methods to populate DB Table of Persona
  */
 public class PersonaDAOImpl implements PersonaDAO {
+    
+    
     /* SQL to insert data */
     private static final String SQL_INSERT =
         "INSERT INTO Persona ("
@@ -57,6 +59,10 @@ public class PersonaDAOImpl implements PersonaDAO {
     public void create(Persona bean, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         try {
+            
+            if (conn==null) {
+                System.out.println("CONEXION INVALIDA");
+            }
             ps = conn.prepareStatement(SQL_INSERT);
             ps.setString(1, bean.getCurp());
             ps.setString(2, bean.getNombre());
