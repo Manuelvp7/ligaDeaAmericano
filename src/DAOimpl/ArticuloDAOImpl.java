@@ -18,6 +18,7 @@ import java.sql.Types;
 import java.util.List;
 import java.util.ArrayList;
 import DAO.ArticuloDAO;
+import modelo.Tienda;
 
 /**
  * This class provides methods to populate DB Table of Articulo
@@ -30,6 +31,16 @@ public class ArticuloDAOImpl implements ArticuloDAO {
         + ") VALUES (?, ?, ?, ?)";
 
     /* SQL to select data */
+    
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ?";
+            
+    
     private static final String SQL_SELECT =
         "SELECT "
         + "categoria, proveedor, nombre, precio "
@@ -74,6 +85,28 @@ public class ArticuloDAOImpl implements ArticuloDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+        public List load(String tienda,Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            System.out.println(tienda);
+            ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA);
+            ps.setString(1,tienda);
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+
+    
+   
     public Articulo load(ArticuloKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -137,14 +170,15 @@ public class ArticuloDAOImpl implements ArticuloDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
-    protected List<Articulo> getResults(ResultSet rs) throws SQLException {
+    protected List<Object[]> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Articulo>();
         while (rs.next()) {
-            Articulo bean = new Articulo();
-            bean.setCategoria(rs.getString("categoria"));
-            bean.setProveedor(rs.getString("proveedor"));
-            bean.setNombre(rs.getString("nombre"));
-            bean.setPrecio(rs.getDouble("precio"));
+            Object[] bean = new Object[5];
+            bean[0]=(rs.getString("nombre"));
+            bean[1]=(rs.getString("categoria"));
+            bean[2]=(rs.getString("proveedor"));
+            bean[3]=rs.getDouble("precio");
+            bean[4]=rs.getInt("existencias");
             results.add(bean);
         }
         return results;

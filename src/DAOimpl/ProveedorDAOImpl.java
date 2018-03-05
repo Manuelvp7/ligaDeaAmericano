@@ -30,6 +30,13 @@ public class ProveedorDAOImpl implements ProveedorDAO {
         + ") VALUES (?, ?)";
 
     /* SQL to select data */
+    
+    
+    private static final String SQL_SELECT_ALL =
+        "SELECT "
+            + "* FROM Proveedor";
+
+    
     private static final String SQL_SELECT =
         "SELECT "
         + "nombre, ciudad "
@@ -72,6 +79,26 @@ public class ProveedorDAOImpl implements ProveedorDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+    
+     
+    public List load(Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(SQL_SELECT_ALL);
+            
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
     public Proveedor load(ProveedorKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;

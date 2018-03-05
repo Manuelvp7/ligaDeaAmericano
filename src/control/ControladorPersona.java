@@ -25,9 +25,9 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
 
 	private panelAdminUsuarioDelSistema panelUsuariosDelSistema;
 	private Persona unaPersona ;
-	private java.sql.Date fechaSQL;
+	
         private Conexion conn;
-        private ResultSet rs;
+        
         
 	//private ConsultorBD consultor;
 	//private InsertorBD insertor;

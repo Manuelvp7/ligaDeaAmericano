@@ -24,12 +24,19 @@ import DAO.CategoriaDAO;
  */
 public class CategoriaDAOImpl implements CategoriaDAO {
     /* SQL to insert data */
+    
+
     private static final String SQL_INSERT =
         "INSERT INTO Categoria ("
         + "categoria, descripcion"
         + ") VALUES (?, ?)";
 
     /* SQL to select data */
+        
+    private static final String SQL_SELECT_ALL=
+            "SELECT"
+            + "* FROM Categoria";
+    
     private static final String SQL_SELECT =
         "SELECT "
         + "categoria, descripcion "
@@ -72,6 +79,27 @@ public class CategoriaDAOImpl implements CategoriaDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+        
+    public List load(Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(SQL_SELECT_ALL);
+            
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+        
+    
     public Categoria load(CategoriaKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;

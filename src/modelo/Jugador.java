@@ -7,14 +7,16 @@
 
 package modelo;
 
+import java.util.Date;
+
 /*
  * For Table Jugador
  */
-public class Jugador implements java.io.Serializable, Cloneable {
+public class Jugador extends Persona implements java.io.Serializable, Cloneable {
     private JugadorKey _key = new JugadorKey();
 
     /* CURP, PK */
-    protected String curp;
+    
 
     /* posicion */
     protected String posicion;
@@ -29,11 +31,25 @@ public class Jugador implements java.io.Serializable, Cloneable {
     protected String nombreequipo;
 
     /* bajaPorLesion */
-    protected byte bajaporlesion;
+    protected boolean bajaporlesion;
 
     /* Return the key object. */
-    public JugadorKey getKeyObject() {
-        return _key;
+
+    
+    public Jugador(String curp,String nombre, String paterno, String materno, int edad, Date fechanacimiento,
+        int numero,String posicion,double salario,String nombreEquipo, boolean bajaporlesion){
+        
+        super(curp,nombre,paterno,materno,edad,fechanacimiento);
+        this.numero = numero;
+        this.salario = salario;
+        this.nombreequipo = nombreEquipo;
+        this.bajaporlesion = this.bajaporlesion;
+        this.posicion = posicion;
+        
+    }
+
+    public Jugador() {
+        
     }
 
     /* CURP, PK */
@@ -88,12 +104,12 @@ public class Jugador implements java.io.Serializable, Cloneable {
     }
 
     /* bajaPorLesion */
-    public byte getBajaporlesion() {
+    public boolean getBajaporlesion() {
         return bajaporlesion;
     }
 
     /* bajaPorLesion */
-    public void setBajaporlesion(byte bajaporlesion) {
+    public void setBajaporlesion(boolean bajaporlesion) {
         this.bajaporlesion = bajaporlesion;
     }
 

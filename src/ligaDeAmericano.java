@@ -1,4 +1,6 @@
 
+import control.ControladorArticulo;
+import control.ControladorJugador;
 import control.ControladorPersona;
 import vista.login;
 
@@ -16,8 +18,15 @@ public class ligaDeAmericano {
     
     public static void main(String[] args) {
         
-        ControladorPersona cp = new ControladorPersona();
-        cp.MostrarPanelAdministradorDeUsuariosDelSistema();
+       // ControladorPersona cp = new ControladorPersona();
+       // cp.MostrarPanelAdministradorDeUsuariosDelSistema();
+        
+        //ControladorJugador cj = new ControladorJugador();
+        //cj.mostrarPanelAdminPlantilla();
+        
+        ControladorArticulo ca = new ControladorArticulo();
+        ca.mostrarPanelAdministrarArticulos();
+        
         
     }
     

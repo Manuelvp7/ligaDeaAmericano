@@ -7,6 +7,7 @@ package Conexiones;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  *
@@ -35,12 +36,13 @@ public class Conexion {
 			
 		}
 
-    public Connection getConexion() {
+    public void cerrarConexion(Connection conn) throws SQLException{
         
-        if(conexion!=null)
-            return conexion;
-        return null;
+        conn.close();
+        
     }
+
+    
         
     
     

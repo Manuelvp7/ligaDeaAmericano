@@ -24,6 +24,19 @@ public class Articulo implements java.io.Serializable, Cloneable {
 
     /* precio */
     protected double precio;
+    
+    public Articulo(String categoria, String proveedor,String nombre, double precio){
+        
+        this.categoria = categoria;
+        this.proveedor = proveedor;
+        this.nombre = nombre;
+        this.precio = precio;
+        
+    }
+    
+    public Articulo(){
+        
+    }
 
     /* Return the key object. */
     public ArticuloKey getKeyObject() {
