@@ -8,6 +8,7 @@ package control;
 import Conexiones.Conexion;
 import DAOimpl.JugadorDAOImpl;
 import DAOimpl.PersonaDAOImpl;
+import DAOimpl.PosicionDAOImpl;
 import interfaces.InterfazAdministrarPlantillaDeJugadores;
 import java.sql.Connection;
 import java.sql.Date;
@@ -16,9 +17,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import modelo.Categoria;
 import modelo.Jugador;
 import modelo.JugadorKey;
 import modelo.Persona;
+import modelo.Posicion;
 import vista.panelAdminEquipo;
 import vista.panelAdminPlantilla;
 
@@ -34,6 +37,7 @@ public class ControladorJugador implements InterfazAdministrarPlantillaDeJugador
     private Jugador unJugador;
     
     private PersonaDAOImpl personaDAOImpl;
+    private PosicionDAOImpl unaPosicionDAOImpl;
     private Connection conn;
 
     public ControladorJugador() {
@@ -49,7 +53,10 @@ public class ControladorJugador implements InterfazAdministrarPlantillaDeJugador
                 panelAdminPlantilla = new panelAdminPlantilla(this);
                 personaDAOImpl = new PersonaDAOImpl();
                 jugadorDAOImpl = new JugadorDAOImpl();
+                unaPosicionDAOImpl = new PosicionDAOImpl();
+                cargarPosiciones();
                 cargarTablaJugador();
+                
                 
             
             }else{
@@ -74,9 +81,9 @@ public class ControladorJugador implements InterfazAdministrarPlantillaDeJugador
         
 
         try {
-             
             
-            
+
+  
             unJugador = new Jugador(curp,nombre,paterno,materno,edad,fechanacimiento,
             numero,posicion,salario,nombreEquipo,bajaporlesion);
             
@@ -109,27 +116,15 @@ public class ControladorJugador implements InterfazAdministrarPlantillaDeJugador
     }
 
     
-    public void actualizar(String curp,String nombre, String paterno, String materno, int edad, java.util.Date fechanacimiento,
-        int numero,String posicion,double salario,String nombreEquipo, boolean bajaporlesion){
-        
-        try {
-            
-            unJugador = new Jugador(curp, nombre, paterno, materno, edad, fechanacimiento, numero, posicion,salario, nombreEquipo, false);
-            personaDAOImpl.update((Persona)unJugador, conn);
-            jugadorDAOImpl.update(unJugador, conn);
-            cargarTablaJugador();
-        } catch (SQLException ex) {
-            Logger.getLogger(ControladorJugador.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
+
 
     @Override
     public void cargarTablaJugador() {
                    
-            List<Jugador> jugadores;
+            List<Object[]> jugadores;
             try {
-                jugadores = jugadorDAOImpl.load(conn);
+                
+                jugadores = jugadorDAOImpl.load(panelAdminPlantilla.getNombreEquipo(),conn);
                 panelAdminPlantilla.actualizarTabla(jugadores);
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
@@ -145,12 +140,46 @@ public class ControladorJugador implements InterfazAdministrarPlantillaDeJugador
         panelAdminPlantilla.setVisible(true);
     }
 
-    @Override
-    public void actualizar(String curp, String nombre, String paterno, String materno, int edad, java.util.Date fechanacimiento, int numero, double salario, String nombreEquipo, boolean bajaporlesion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+
+
+    public void cargarPosiciones(){
+        
+                
+        List<Posicion> posiciones;
+        try {
+            posiciones = unaPosicionDAOImpl.load(conn);
+            if (posiciones==null) {
+                System.out.println("FUUUUUUUUUUCK");
+            }
+            panelAdminPlantilla.cargarComboPosicion(posiciones);
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
+    @Override
+    public void actualizar(String curp, String nombre, String paterno, String materno, int edad, java.util.Date fechanacimiento, int numero, String posicion, double salario, String nombreEquipo, boolean bajaporlesion) {
+                
+        try {
+            
 
+  
+            unJugador = new Jugador(curp,nombre,paterno,materno,edad,fechanacimiento,
+            numero,posicion,salario,nombreEquipo,bajaporlesion);
+            
+            personaDAOImpl.update(unJugador,conn);
+
+            jugadorDAOImpl.update(unJugador, conn);
+            
+            cargarTablaJugador();
+        } catch (SQLException ex) {
+            Logger.getLogger(ControladorJugador.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
   
     
     

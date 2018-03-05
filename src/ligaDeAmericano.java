@@ -18,14 +18,14 @@ public class ligaDeAmericano {
     
     public static void main(String[] args) {
         
-       // ControladorPersona cp = new ControladorPersona();
-       // cp.MostrarPanelAdministradorDeUsuariosDelSistema();
+       //ControladorPersona cp = new ControladorPersona();
+        //cp.MostrarPanelAdministradorDeUsuariosDelSistema();
         
-        //ControladorJugador cj = new ControladorJugador();
-        //cj.mostrarPanelAdminPlantilla();
+        ControladorJugador cj = new ControladorJugador();
+        cj.mostrarPanelAdminPlantilla();
         
-        ControladorArticulo ca = new ControladorArticulo();
-        ca.mostrarPanelAdministrarArticulos();
+        //ControladorArticulo ca = new ControladorArticulo();
+        //ca.mostrarPanelAdministrarArticulos();
         
         
     }

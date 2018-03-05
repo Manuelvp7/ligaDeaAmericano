@@ -43,7 +43,7 @@ public class Jugador extends Persona implements java.io.Serializable, Cloneable 
         this.numero = numero;
         this.salario = salario;
         this.nombreequipo = nombreEquipo;
-        this.bajaporlesion = this.bajaporlesion;
+        this.bajaporlesion = bajaporlesion;
         this.posicion = posicion;
         
     }

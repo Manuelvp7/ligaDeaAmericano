@@ -18,7 +18,7 @@ public interface InterfazAdministrarPlantillaDeJugadores {
         int numero,String posicion,double salario,String nombreEquipo, boolean bajaporlesion);
     public void borrar(String curp);
     public void actualizar(String curp,String nombre, String paterno, String materno, int edad, java.util.Date fechanacimiento,
-        int numero,double salario,String nombreEquipo, boolean bajaporlesion);
+        int numero,String posicion,double salario,String nombreEquipo, boolean bajaporlesion);
     public void cargarTablaJugador();
     
 }
