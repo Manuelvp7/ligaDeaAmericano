@@ -1,8 +1,10 @@
 
 import control.ControladorArticulo;
 import control.ControladorJugador;
+import control.ControladorPartido;
 import control.ControladorPersona;
 import vista.login;
+import vista.PanelAdminDeLiga;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,11 +23,14 @@ public class ligaDeAmericano {
        //ControladorPersona cp = new ControladorPersona();
         //cp.MostrarPanelAdministradorDeUsuariosDelSistema();
         
-        ControladorJugador cj = new ControladorJugador();
-        cj.mostrarPanelAdminPlantilla();
+        //ControladorJugador cj = new ControladorJugador();
+        //cj.mostrarPanelAdminPlantilla();
         
         //ControladorArticulo ca = new ControladorArticulo();
         //ca.mostrarPanelAdministrarArticulos();
+        
+        ControladorPartido cp = new ControladorPartido();
+        cp.mostrarPanel();
         
         
     }
