@@ -22,6 +22,8 @@ public class PanelAdminDeMercancia extends javax.swing.JFrame {
     
     private interfazAdministrarMercancia unaInterfazAdministrarMercancia;
     private DefaultTableModel modelo;
+
+
     
     public PanelAdminDeMercancia(interfazAdministrarMercancia unaInterfazAdministrarMercancia) {
         
@@ -460,7 +462,8 @@ public class PanelAdminDeMercancia extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     
-        public void actualizarTabla(List<Object[]> articulos){
+        
+    public void actualizarTabla(List<Object[]> articulos){
         
         modelo.setRowCount(0);
 			
@@ -472,15 +475,11 @@ public class PanelAdminDeMercancia extends javax.swing.JFrame {
 	for(int i=0;i<articulos.size();i++){
 			
                         registro = articulos.get(i);
-                    
-                        
-			
 			modelo.addRow(registro);
 			
 		}
 		tableroMercancia.setModel(modelo);
-		
-        
+
     }
         
     public void cargarComboCategoria(List<Categoria> categorias){

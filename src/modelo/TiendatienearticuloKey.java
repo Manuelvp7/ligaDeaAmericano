@@ -18,13 +18,15 @@ public class TiendatienearticuloKey implements java.io.Serializable, Cloneable {
     protected String nombreproveedor;
 
     
-    public TiendatienearticuloKey(String proveedor, String nombre, String tienda){
+    public TiendatienearticuloKey(String tienda, String nombre, String proveedor){
         
         this.nombrearticulo = nombre;
         this.nombreproveedor = proveedor;
         this.nombretienda = tienda;
         
     }
+    
+   
     
     public TiendatienearticuloKey(){
         

@@ -39,7 +39,70 @@ public class ArticuloDAOImpl implements ArticuloDAO {
             + " FROM Articulo INNE JOIN TiendaTieneArticulo"
             + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
             + "Where nombreTienda = ?";
+           
+        
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_PROVEEDOR=
             
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND proveedor = ?";
+    
+        private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_ARTICULO=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND nombre = ?";
+              
+       
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_CATEGORIA=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND categoria = ?";
+    
+        
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_Y_CATEGORIA=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND nombre = ?"
+            + "AND categoria = ?";
+        
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_Y_PROVEEDOR=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND nombre = ?"
+            + "AND proveedor = ?";
+        
+    private static final String SQL_SELECT_ARTICULOS_EN_TIENDA_POR_PROVEEDOR_Y_CATEGORIA=
+            
+            "select "
+            + "nombre,categoria,precio,proveedor,precio,existencias"
+            + " FROM Articulo INNE JOIN TiendaTieneArticulo"
+            + " ON nombre = nombreArticulo AND proveedor = nombreProveedor "
+            + "Where nombreTienda = ? "
+            + "AND proveedor = ?"
+            + "AND categoria = ?";
+    
+    
+    
+    
     
     private static final String SQL_SELECT =
         "SELECT "
@@ -86,7 +149,94 @@ public class ArticuloDAOImpl implements ArticuloDAO {
      * @exception       SQLException if something is wrong.
      */
     
-        public List load(String tienda,Connection conn) throws SQLException {
+        
+    public List load(String tienda,String argumento,int campo,Connection conn) throws SQLException {
+        
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            switch(campo){
+                
+                case 1:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_ARTICULO);
+                    break;
+                }
+                case 2:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_PROVEEDOR);
+                    break;
+                }
+                case 3:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_CATEGORIA);
+                    break;
+                }
+                default:{
+                    break;
+                }
+                      
+                
+            }
+
+            ps.setString(1,tienda);
+            ps.setString(2, argumento);
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+    
+    //[0],[nombre],[provedor],[categoria],[nombre,proveedor],[nombre,categoria],[proveedor,categoria],[nombre,proveedor,categoria]
+
+        public List load(String tienda,String argumento1,String argumento2,int combinacion,Connection conn) throws SQLException {
+        
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            switch(combinacion){
+                
+                case 1:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_Y_PROVEEDOR);
+                    break;
+                }
+                case 2:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_NOMBRE_Y_CATEGORIA);
+                    break;
+                }
+                case 3:{
+                    ps = conn.prepareStatement(SQL_SELECT_ARTICULOS_EN_TIENDA_POR_PROVEEDOR_Y_CATEGORIA);
+                    break;
+                }
+                default:{
+                    break;
+                }
+                      
+                
+            }
+
+            ps.setString(1,tienda);
+            ps.setString(2, argumento1);
+            ps.setString(3, argumento2);
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+    
+    
+
+    
+    public List load(String tienda,Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -177,7 +327,7 @@ public class ArticuloDAOImpl implements ArticuloDAO {
             bean[0]=(rs.getString("nombre"));
             bean[1]=(rs.getString("categoria"));
             bean[2]=(rs.getString("proveedor"));
-            bean[3]=rs.getDouble("precio");
+            bean[3]=rs.getFloat("precio");
             bean[4]=rs.getInt("existencias");
             results.add(bean);
         }

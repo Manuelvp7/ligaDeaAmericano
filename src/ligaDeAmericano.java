@@ -3,6 +3,7 @@ import control.ControladorArticulo;
 import control.ControladorJugador;
 import control.ControladorPartido;
 import control.ControladorPersona;
+import control.ControladorVenta;
 import vista.login;
 import vista.PanelAdminDeLiga;
 
@@ -29,8 +30,10 @@ public class ligaDeAmericano {
         //ControladorArticulo ca = new ControladorArticulo();
         //ca.mostrarPanelAdministrarArticulos();
         
-        ControladorPartido cp = new ControladorPartido();
-        cp.mostrarPanel();
+//        ControladorPartido cp = new ControladorPartido();
+  //      cp.mostrarPanel();
+        ControladorVenta cv = new ControladorVenta();
+        cv.mostrarPanel();
         
         
     }

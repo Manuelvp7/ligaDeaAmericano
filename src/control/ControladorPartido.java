@@ -11,7 +11,7 @@ import DAOimpl.EquipoDAOImpl;
 import DAOimpl.PartidoDAOImpl;
 import DAOimpl.ProveedorDAOImpl;
 import DAOimpl.TiendatienearticuloDAOImpl;
-import dao4j.sample.Tiempo;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

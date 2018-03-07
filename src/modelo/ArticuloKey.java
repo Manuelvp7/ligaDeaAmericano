@@ -13,6 +13,18 @@ public class ArticuloKey implements java.io.Serializable, Cloneable {
 
     /* nombre */
     protected String nombre;
+    
+    public ArticuloKey(){
+        
+        
+    }
+    
+     
+    public ArticuloKey(String nombre, String proveedor){
+        this.nombre = nombre;
+        this.proveedor = proveedor;
+        
+    }
 
     /* proveedor */
     public String getProveedor() {
