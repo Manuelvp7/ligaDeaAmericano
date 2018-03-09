@@ -4,9 +4,14 @@
  * and open the template in the editor.
  */
 package vista_jpanel;
+import interfaces.interfazAdministrarEquipo;
+import interfaces.interfazAdministrarMercancia;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 import modelo.Jugador;
+import modelo.Partido;
 import modelo.Persona;
+import modelo.Recorddeequipo;
 
 /**
  *
@@ -14,11 +19,37 @@ import modelo.Persona;
  */
 public class panelAdminEquipo extends javax.swing.JPanel {
 
+    
+        
+    private interfazAdministrarEquipo unaInAdministrarEquipo;
+    
+    private DefaultTableModel modeloTablaDeResultados;
+    private DefaultTableModel modeloTablaDeProximasJornada;
+    private DefaultTableModel modeloTablaDePosiciones;
+    
+
+
+    
+    public panelAdminEquipo(interfazAdministrarEquipo unaInAdministrarEquipo) {
+        
+       
+        this.unaInAdministrarEquipo = unaInAdministrarEquipo;
+        initComponents();
+        
+        modeloTablaDeProximasJornada = (DefaultTableModel)tablaProximasJornadas.getModel();
+        modeloTablaDeResultados = (DefaultTableModel)tablaDeResultados.getModel();
+        modeloTablaDePosiciones = (DefaultTableModel)tablaDePosiciones.getModel();
+        
+
+        
+    }
+    
+    
     /**
      * Creates new form panelAdminEquipo
      */
     public panelAdminEquipo() {
-        initComponents();
+        
     }
 
     /**
@@ -39,15 +70,19 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaDePosiciones = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        lblNombreEquipo = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tablaDeResultados = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaProximasJornadas = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
+        lblTemporada = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -73,9 +108,9 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         jLabel7.setForeground(new java.awt.Color(153, 51, 0));
         jLabel7.setText("Próximas fechas:");
 
-        jTable1.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jTable1.setForeground(new java.awt.Color(153, 51, 0));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaDePosiciones.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        tablaDePosiciones.setForeground(new java.awt.Color(153, 51, 0));
+        tablaDePosiciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -83,10 +118,10 @@ public class panelAdminEquipo extends javax.swing.JPanel {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Equipo", "G", "P", "E"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaDePosiciones);
 
         jButton2.setBackground(new java.awt.Color(153, 51, 0));
         jButton2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -113,44 +148,6 @@ public class panelAdminEquipo extends javax.swing.JPanel {
             }
         });
 
-        jTable2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jTable2.setForeground(new java.awt.Color(153, 51, 0));
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "FECHA", "LOCAL", "VISITANTE", "MARCADOR LOCAL", "MARCADOR VISITANTE"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(jTable2);
-
-        tablaProximasJornadas.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        tablaProximasJornadas.setForeground(new java.awt.Color(153, 51, 0));
-        tablaProximasJornadas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "FECHA", "LOCAL", "VISITANTE", "ESTADIO"
-            }
-        ));
-        jScrollPane3.setViewportView(tablaProximasJornadas);
-
         jButton5.setBackground(new java.awt.Color(153, 51, 0));
         jButton5.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(255, 255, 255));
@@ -161,76 +158,141 @@ public class panelAdminEquipo extends javax.swing.JPanel {
             }
         });
 
+        lblNombreEquipo.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        lblNombreEquipo.setForeground(new java.awt.Color(153, 51, 0));
+        lblNombreEquipo.setText("BURROS BLANCOS");
+
+        jScrollPane4.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        tablaDeResultados.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        tablaDeResultados.setForeground(new java.awt.Color(153, 51, 0));
+        tablaDeResultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "TEMPORADA", "JORNADA", "FECHA", "EQUIPO LOCAL", "MARCADOR LOCAL", "EQUIPO VISITANTE", "MARCADOR VISITANTE"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tablaDeResultados);
+
+        jScrollPane4.setViewportView(jScrollPane2);
+
+        tablaProximasJornadas.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        tablaProximasJornadas.setForeground(new java.awt.Color(153, 51, 0));
+        tablaProximasJornadas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "FECHA", "HORA", "LOCAL", "VISITANTE", "ESTADIO"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(tablaProximasJornadas);
+
+        jScrollPane5.setViewportView(jScrollPane3);
+
+        lblTemporada.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        lblTemporada.setForeground(new java.awt.Color(153, 51, 0));
+        lblTemporada.setText("2017");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(40, 40, 40)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(86, 86, 86)
+                        .addComponent(jLabel1))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1029, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(47, 47, 47)
+                                .addComponent(lblNombreEquipo, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(138, 138, 138)
+                                .addComponent(jLabel4)))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTemporada)
+                            .addComponent(jLabel7)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addComponent(jLabel6))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(29, 29, 29)
+                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton4)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jButton2))
-                                    .addComponent(jButton5)))
-                            .addComponent(jLabel7))
-                        .addGap(20, 20, 20))))
+                                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jButton5)
+                                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 3, Short.MAX_VALUE)))))))
+                .addGap(114, 114, 114))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel4)
-                .addGap(33, 33, 33)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
-                .addGap(126, 126, 126))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(110, 110, 110)
+                .addComponent(jLabel1)
+                .addGap(8, 8, 8)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(lblTemporada))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jLabel6))
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(lblNombreEquipo)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton4)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -250,7 +312,9 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,8 +351,81 @@ public class panelAdminEquipo extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JLabel lblNombreEquipo;
+    private javax.swing.JLabel lblTemporada;
+    private javax.swing.JTable tablaDePosiciones;
+    private javax.swing.JTable tablaDeResultados;
     private javax.swing.JTable tablaProximasJornadas;
     // End of variables declaration//GEN-END:variables
+
+    public void cargarProximasFechas(List<Object[]> proximasFechas){
+    
+        modeloTablaDeProximasJornada.setRowCount(0);
+        Object[] registro = new Object[5];
+        for (int i = 0; i < proximasFechas.size(); i++) {
+            
+            registro = proximasFechas.get(i);
+            
+           
+            
+            modeloTablaDeProximasJornada.addRow(registro);
+            
+        }
+        
+    }
+    public void cargarTablaDePosiciones(List<Recorddeequipo> tablaDePosiciones){
+        
+        modeloTablaDePosiciones.setRowCount(0);
+                
+        Object[] registro = new Object[5];
+        for (int i = 0; i < tablaDePosiciones.size(); i++) {
+            
+            registro[0]=tablaDePosiciones.get(i).getTemporada();
+            registro[1]=tablaDePosiciones.get(i).getNombreequipo();
+            registro[2]=tablaDePosiciones.get(i).getPartidosganados();
+            registro[3]=tablaDePosiciones.get(i).getPartidosperdidos();
+            registro[4]=tablaDePosiciones.get(i).getPartidosempatados();
+            modeloTablaDePosiciones.addRow(registro);
+          
+    
+        }
+
+
+    }
+    
+        
+    public void cargarTablaDeResultados(List<Partido> resultados){
+        
+        modeloTablaDeResultados.setRowCount(0);
+        
+        Object[] registro = new Object[7];
+        for (int i = 0; i < resultados.size(); i++) {
+            
+            registro[0] = resultados.get(i).getTemporada();
+            registro[1] = resultados.get(i).getNojornada();
+            registro[2] = resultados.get(i).getFecha();
+            registro[3] = resultados.get(i).getEquipolocal();
+            registro[4] = resultados.get(i).getMarcadorlocal();
+            registro[5] = resultados.get(i).getEquipovisitante();
+            registro[6] = resultados.get(i).getMarcadorvisitante();
+            
+            
+            modeloTablaDeResultados.addRow(registro);
+          
+    
+        }
+        
+    }
+    
+    public void cargarTablas(){
+        
+        unaInAdministrarEquipo.cargarTablaDePosiciones(lblTemporada.getText());
+        
+        unaInAdministrarEquipo.cargarProximasFechas(lblTemporada.getText(),lblNombreEquipo.getText());
+        
+        unaInAdministrarEquipo.cargarTablaDeResultados(lblTemporada.getText(),lblNombreEquipo.getText());
+    }
+    
 }

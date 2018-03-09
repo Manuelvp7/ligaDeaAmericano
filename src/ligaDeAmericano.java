@@ -1,9 +1,11 @@
 
+import control.ControladorAdminDeEquipo;
 import control.ControladorArticulo;
 import control.ControladorJugador;
 import control.ControladorPartido;
 import control.ControladorPersona;
 import control.ControladorVenta;
+import javax.swing.JFrame;
 import vista.login;
 import vista.PanelAdminDeLiga;
 
@@ -30,10 +32,28 @@ public class ligaDeAmericano {
         //ControladorArticulo ca = new ControladorArticulo();
         //ca.mostrarPanelAdministrarArticulos();
         
-//        ControladorPartido cp = new ControladorPartido();
-  //      cp.mostrarPanel();
-        ControladorVenta cv = new ControladorVenta();
-        cv.mostrarPanel();
+        ControladorPartido cp = new ControladorPartido();
+        //cp.mostrarPanel();
+        //ControladorVenta cv = new ControladorVenta();
+        //cv.mostrarPanel();
+        
+        ControladorAdminDeEquipo unControladorAdminDeEquipo = new ControladorAdminDeEquipo();
+        
+        JFrame miFrame = new JFrame();
+        miFrame.setDefaultCloseOperation(0);
+        
+        
+        		
+        miFrame.setDefaultCloseOperation(3);
+	
+        miFrame.add(unControladorAdminDeEquipo.getUnPanelAdminEquipo());
+        //miFrame.add(cp.getPanelAdminDeLiga());
+	
+        miFrame.setBounds(50,100,1200,550);
+	
+        miFrame.setVisible(true);
+        
+
         
         
     }

@@ -13,11 +13,13 @@ import java.util.Date;
  */
 public interface InterfazAdministrarLigaDeAmericano {
     
-    public void agregar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora);
+    public void agregar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora,boolean partidoFinalizado);
     
     public void borrar(String temporada,int noJornada,String equipolocal,String equipovisitante);
     
-    public void actualizar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora,int ml,int mv);
+    public void actualizar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora,int ml,int mv,boolean partidoFinalizado);
+    
+    
     
     
     

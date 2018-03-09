@@ -7,22 +7,22 @@
 
 package DAO;
 
-import modelo.Partido;
-import modelo.PartidoKey;
+import modelo.RecorddeequipoKey;
+import modelo.Recorddeequipo;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * This interface provides methods to populate DB Table of Partido
+ * This interface provides methods to populate DB Table of RecordDeEquipo
  */
-public interface PartidoDAO {
+public interface RecorddeequipoDAO {
     /**
      * Create a new record in Database.
      * @param bean   The Object to be inserted.
      * @param conn   JDBC Connection.
      * @exception    SQLException if something is wrong.
      */
-    public void create(Partido bean, Connection conn) throws SQLException;
+    public void create(Recorddeequipo bean, Connection conn) throws SQLException;
 
     /**
      * Retrive a record from Database.
@@ -30,7 +30,7 @@ public interface PartidoDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
-    public Partido load(PartidoKey key, Connection conn) throws SQLException;
+    public Recorddeequipo load(RecorddeequipoKey key, Connection conn) throws SQLException;
 
     /**
      * Update a record in Database.
@@ -38,7 +38,7 @@ public interface PartidoDAO {
      * @param conn   JDBC Connection.
      * @exception    SQLException if something is wrong.
      */
-    public void update(Partido bean, Connection conn) throws SQLException;
+    public void update(Recorddeequipo bean, Connection conn) throws SQLException;
 
     /**
      * Create a new record in Database.
@@ -46,5 +46,5 @@ public interface PartidoDAO {
      * @param conn   JDBC Connection.
      * @exception    SQLException if something is wrong.
      */
-    public void delete(PartidoKey key, Connection conn) throws SQLException;
+    public void delete(RecorddeequipoKey key, Connection conn) throws SQLException;
 }
