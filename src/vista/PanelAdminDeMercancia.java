@@ -511,6 +511,10 @@ public class PanelAdminDeMercancia extends javax.swing.JFrame {
         return lblNombreTiend.getText();
     }
 
+    public void cargarComboDeTiendas(List<Object[]> registros) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 
 }

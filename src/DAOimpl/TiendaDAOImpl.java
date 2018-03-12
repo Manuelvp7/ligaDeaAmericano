@@ -30,6 +30,13 @@ public class TiendaDAOImpl implements TiendaDAO {
         + ") VALUES (?, ?, ?)";
 
     /* SQL to select data */
+    
+    
+    private static final String SQL_SELECT_NOMBRES =
+        "SELECT "
+        + "nombre "
+        + "FROM Tienda";
+    
     private static final String SQL_SELECT =
         "SELECT "
         + "nombre, nombreEstadio, curpGerente "
@@ -73,6 +80,33 @@ public class TiendaDAOImpl implements TiendaDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+    
+    public List<Object[]> loadNombreTiendas(Connection conn) throws SQLException{
+                
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        
+        try {
+            ps = conn.prepareStatement(SQL_SELECT_NOMBRES);
+            
+                    
+            
+            rs = ps.executeQuery();
+            List results = getNombresDeTienda(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+        
+        
+    }
+    
     public Tienda load(TiendaKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -133,6 +167,20 @@ public class TiendaDAOImpl implements TiendaDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
+    
+     
+    protected List<Object[]> getNombresDeTienda(ResultSet rs) throws SQLException {
+        List results = new ArrayList<Object[]>();
+        while (rs.next()) {
+            Object registro;
+            registro = (rs.getString("nombre"));
+            
+            results.add(registro);
+            
+            
+        }
+        return results;
+    }
     protected List<Tienda> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Tienda>();
         while (rs.next()) {

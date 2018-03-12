@@ -21,4 +21,6 @@ public interface InterfazAdministrarPlantillaDeJugadores {
         int numero,String posicion,double salario,String nombreEquipo, boolean bajaporlesion);
     public void cargarTablaJugador();
     
+    public void regresar();
+    
 }

@@ -32,7 +32,7 @@ import modelo.Tienda;
 import modelo.Tiendatienearticulo;
 import modelo.TiendatienearticuloKey;
 
-import vista.PanelVentas;
+import vista_jpanel.PanelVentas;
 
 
 
@@ -189,7 +189,7 @@ public class ControladorVenta implements InterfazDeVentas{
             unPanelVentas.cargarComboCategoria(categorias);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
        
@@ -204,7 +204,7 @@ public class ControladorVenta implements InterfazDeVentas{
             unPanelVentas.cargarComboProveedores(proveedores);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 
@@ -321,6 +321,11 @@ public class ControladorVenta implements InterfazDeVentas{
                }
         
     }
+
+    public PanelVentas getUnPanelVentas() {
+        return unPanelVentas;
+    }
+    
     
     
 

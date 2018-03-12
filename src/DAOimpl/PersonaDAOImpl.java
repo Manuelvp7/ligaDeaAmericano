@@ -40,8 +40,9 @@ public class PersonaDAOImpl implements PersonaDAO {
         + "CURP = ?";
     
     private static final String SQL_SELECT_ALL =
-            "SELECT"
-            + "* FROM Persona";
+            "SELECT "
+            + "p.CURP, nombre, paterno, materno, edad, fechaNacimiento,nombreUsuario,contrasena,categoriaUsuario "
+            + " FROM Persona p INNER JOIN Usuario u ON p.CURP = u.CURP ";
 
     /* SQL to update data */
     private static final String SQL_UPDATE =
@@ -68,6 +69,7 @@ public class PersonaDAOImpl implements PersonaDAO {
             if (conn==null) {
                 System.out.println("CONEXION INVALIDA");
             }
+            System.out.println("PERSONA DESDE PERSONA DAO IMPL "+bean.toString());
             ps = conn.prepareStatement(SQL_INSERT);
             ps.setString(1, bean.getCurp());
             ps.setString(2, bean.getNombre());
@@ -113,8 +115,10 @@ public class PersonaDAOImpl implements PersonaDAO {
         ResultSet rs = null;
         try {
             ps = conn.prepareStatement(SQL_SELECT_ALL);
+            System.out.println("PS DESDE PERSONADAOIMPL "+ps.toString());
             rs = ps.executeQuery();
-            List<Persona> results = getResults(rs);
+            
+            List<Object[]> results = getResultsConUser(rs);
             if (results.size() > 0)
                 return results;
             else
@@ -175,6 +179,31 @@ public class PersonaDAOImpl implements PersonaDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
+    
+       
+    public List<Object[]> getResultsConUser(ResultSet rs) throws SQLException {
+        List results = new ArrayList<Object[]>();
+        while (rs.next()) {
+            
+            Object[] registro = new Object[9];
+            registro[0]=(rs.getString("CURP"));
+            registro[1]=(rs.getString("nombre"));
+            registro[2]=(rs.getString("paterno"));
+            registro[3]=(rs.getString("materno"));
+            registro[4]=(rs.getInt("edad"));
+            registro[5]=(rs.getDate("fechaNacimiento"));
+            registro[6] = rs.getString("nombreUsuario");
+            registro[7] = rs.getString("contrasena");
+            registro[8] = rs.getString("categoriaUsuario");
+            
+            
+            results.add(registro);
+        }
+        return results;
+    }
+    
+    
+    
     public List<Persona> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Persona>();
         while (rs.next()) {

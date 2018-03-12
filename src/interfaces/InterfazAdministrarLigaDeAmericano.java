@@ -5,6 +5,7 @@
  */
 package interfaces;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -13,11 +14,17 @@ import java.util.Date;
  */
 public interface InterfazAdministrarLigaDeAmericano {
     
-    public void agregar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora,boolean partidoFinalizado);
+    public void agregar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Timestamp hora,boolean partidoFinalizado);
     
     public void borrar(String temporada,int noJornada,String equipolocal,String equipovisitante);
     
-    public void actualizar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Date hora,int ml,int mv,boolean partidoFinalizado);
+    public void actualizar(String temporada,int noJornada,String equipolocal,String equipovisitante,Date fecha,Timestamp hora,int ml,int mv,boolean partidoFinalizado);
+    
+    public void regresarAlPanelPadre();
+    
+    public void irA();
+
+    
     
     
     

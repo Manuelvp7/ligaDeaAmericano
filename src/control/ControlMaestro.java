@@ -9,6 +9,6 @@ package control;
  *
  * @author manuel
  */
-class EmpleadotieneventasDAOIml {
+public class ControlMaestro {
     
 }

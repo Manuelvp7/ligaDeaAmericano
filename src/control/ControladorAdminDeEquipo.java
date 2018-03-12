@@ -9,6 +9,7 @@ import DAOimpl.EquipoDAOImpl;
 import DAOimpl.PartidoDAOImpl;
 import DAOimpl.RecorddeequipoDAOImpl;
 import com.sun.xml.internal.bind.v2.runtime.output.SAXOutput;
+import interfaces.InterfazLoginControl;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,9 +17,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import modelo.Partido;
 import modelo.Recorddeequipo;
-import vista.PanelAdminDeLiga;
+
 import vista_jpanel.panelAdminEquipo;
 
 /**
@@ -26,6 +28,17 @@ import vista_jpanel.panelAdminEquipo;
  * @author manuel
  */
 public class ControladorAdminDeEquipo implements interfaces.interfazAdministrarEquipo{
+    
+    //INTERFAZ
+    private interfaces.interfazAdministrarEquipo unaInterfazAdministrarEquipo;
+    
+    //CONTROL
+    private ControladorPersona unControladorPersona;
+    private ControladorTableroDeMercado unControladorTableroDeMercado;
+    private ControladorJugador unControladorJugador;
+    private ControladorPanelAdminDeMercancia unControladorPanelAdminDeMercancia;
+    
+    private InterfazLoginControl unaInterfazLoginControl;
     
     //PANEL
     private panelAdminEquipo unPanelAdminEquipo;
@@ -39,12 +52,22 @@ public class ControladorAdminDeEquipo implements interfaces.interfazAdministrarE
     
     
     
-    public ControladorAdminDeEquipo(){
+    public ControladorAdminDeEquipo( InterfazLoginControl unaInterfazLoginControl,String nombre){
                
         try{
-			
+		
+                
+    
+            this.unaInterfazAdministrarEquipo = unaInterfazAdministrarEquipo;
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/lmfa?autoReconnect=true&useSSL=false", "root" , "manolito130");
             if (conn!=null) {
+                
+                this.unaInterfazLoginControl = unaInterfazLoginControl;
+                
+                unControladorJugador = new ControladorJugador(nombre,this);
+                unControladorPersona = new ControladorPersona();
+                unControladorPersona.setUnaInterfazAdministrarEquipo(this);
+                unControladorPanelAdminDeMercancia = new ControladorPanelAdminDeMercancia(this);
                 
                 unPartidoDAOImpl = new PartidoDAOImpl();
                 unRecorddeequipoDAOImpl = new RecorddeequipoDAOImpl();
@@ -128,7 +151,43 @@ public class ControladorAdminDeEquipo implements interfaces.interfazAdministrarE
     public panelAdminEquipo getUnPanelAdminEquipo() {
         return unPanelAdminEquipo;
     }
-    
+
+    @Override
+    public void irA(int panel) {
+        JPanel elPanel = null;
+        switch ( panel){
+            case 1:{
+                
+                elPanel=unControladorJugador.getPanelAdminPlantilla();
+                break;
+            }
+            case 2:{
+                
+                
+                elPanel=unControladorPanelAdminDeMercancia.getUnPanelAdminDeMercancia();
+                break;
+            }
+            case 3:{
+                elPanel=unControladorPersona.getPanelUsuariosDelSistema();
+                
+                break;
+            }
+            default:{
+                break;
+            }
+
+        }
+        unaInterfazLoginControl.cambiarPanel(elPanel);
+    }
+
+    @Override
+    public void regresarAlPanelPadre() {
+        
+        unaInterfazLoginControl.cambiarPanel(unPanelAdminEquipo);
+        
+    }
+        
+
     
 
 

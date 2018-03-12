@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vista;
+package vista_jpanel;
 
 import interfaces.InterfazDeVentas;
 import interfaces.interfazAdministrarMercancia;
@@ -810,7 +810,7 @@ public class PanelVentas extends javax.swing.JFrame {
         }
         
     }
-        
+        //VALIDA SI EL PRODUCTO YA SE ANADIO AL CARRITO DE COMPRAS
     public boolean busquedaEnTablaArticulos(Object[] articulo){
         
                 

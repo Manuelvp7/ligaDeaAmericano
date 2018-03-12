@@ -6,6 +6,7 @@
 package vista_jpanel;
 import interfaces.interfazAdministrarEquipo;
 import interfaces.interfazAdministrarMercancia;
+import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import modelo.Jugador;
@@ -28,6 +29,9 @@ public class panelAdminEquipo extends javax.swing.JPanel {
     private DefaultTableModel modeloTablaDePosiciones;
     
 
+        
+    
+
 
     
     public panelAdminEquipo(interfazAdministrarEquipo unaInAdministrarEquipo) {
@@ -39,8 +43,20 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         modeloTablaDeProximasJornada = (DefaultTableModel)tablaProximasJornadas.getModel();
         modeloTablaDeResultados = (DefaultTableModel)tablaDeResultados.getModel();
         modeloTablaDePosiciones = (DefaultTableModel)tablaDePosiciones.getModel();
+        getTemporada();
         
 
+        
+    }
+    
+    
+    public void getTemporada(){
+        Date fecha = new Date();
+        
+        if((fecha.getMonth())<=6)
+            lblTemporada.setText(String.valueOf(fecha.getYear()+1899));
+        else 
+            lblTemporada.setText(String.valueOf(fecha.getYear()+1900));
         
     }
     
@@ -83,6 +99,7 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaProximasJornadas = new javax.swing.JTable();
         lblTemporada = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
@@ -127,6 +144,11 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         jButton2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("Adm. plantilla");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setBackground(new java.awt.Color(153, 51, 0));
         jButton3.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -218,6 +240,8 @@ public class panelAdminEquipo extends javax.swing.JPanel {
         lblTemporada.setForeground(new java.awt.Color(153, 51, 0));
         lblTemporada.setText("2017");
 
+        jLabel2.setText("TEMPORADA:");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -243,8 +267,6 @@ public class panelAdminEquipo extends javax.swing.JPanel {
                                 .addComponent(jLabel4)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTemporada)
-                            .addComponent(jLabel7)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -255,7 +277,15 @@ public class panelAdminEquipo extends javax.swing.JPanel {
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jButton5)
                                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 3, Short.MAX_VALUE)))))))
+                                        .addGap(0, 3, Short.MAX_VALUE))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(73, 73, 73)
+                                        .addComponent(lblTemporada))
+                                    .addComponent(jLabel7))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(114, 114, 114))
         );
         jPanel2Layout.setVerticalGroup(
@@ -263,11 +293,12 @@ public class panelAdminEquipo extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(jLabel1)
-                .addGap(8, 8, 8)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(lblTemporada))
+                    .addComponent(lblTemporada)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -323,16 +354,22 @@ public class panelAdminEquipo extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        unaInAdministrarEquipo.irA(2);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+
+        unaInAdministrarEquipo.irA(3);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        unaInAdministrarEquipo.irA(1);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -341,6 +378,7 @@ public class panelAdminEquipo extends javax.swing.JPanel {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

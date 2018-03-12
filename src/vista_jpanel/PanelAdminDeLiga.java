@@ -54,7 +54,6 @@ public class PanelAdminDeLiga extends JPanel {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
         btnAgregar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -77,8 +76,7 @@ public class PanelAdminDeLiga extends JPanel {
         jLabel18 = new javax.swing.JLabel();
         txtMarcadorLocal = new javax.swing.JTextField();
         txtMarcadorVisitante = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnAdminUsers = new javax.swing.JButton();
         comboEquipoLocal = new javax.swing.JComboBox<>();
         comboEquipoVisitante = new javax.swing.JComboBox<>();
         dateChooser = new com.toedter.calendar.JDateChooser();
@@ -90,11 +88,6 @@ public class PanelAdminDeLiga extends JPanel {
         jPanel1.setBackground(new java.awt.Color(204, 204, 204));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-
-        jButton4.setBackground(new java.awt.Color(153, 51, 0));
-        jButton4.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Salir");
 
         btnAgregar.setBackground(new java.awt.Color(153, 51, 0));
         btnAgregar.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
@@ -172,20 +165,15 @@ public class PanelAdminDeLiga extends JPanel {
         jLabel18.setForeground(new java.awt.Color(153, 51, 0));
         jLabel18.setText("Marcador Visitante");
 
-        jButton3.setBackground(new java.awt.Color(153, 51, 0));
-        jButton3.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Adm. record");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnAdminUsers.setBackground(new java.awt.Color(153, 51, 0));
+        btnAdminUsers.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
+        btnAdminUsers.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdminUsers.setText("Adm. usuarios");
+        btnAdminUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnAdminUsersActionPerformed(evt);
             }
         });
-
-        jButton2.setBackground(new java.awt.Color(153, 51, 0));
-        jButton2.setFont(new java.awt.Font("Century Gothic", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Adm. usuarios");
 
         comboEquipoLocal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -273,10 +261,7 @@ public class PanelAdminDeLiga extends JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 625, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton2)
-                            .addComponent(jButton4)))
+                        .addComponent(btnAdminUsers))
                     .addComponent(jLabel1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel15)
@@ -343,12 +328,7 @@ public class PanelAdminDeLiga extends JPanel {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jButton2)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4)))
+                            .addComponent(btnAdminUsers))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
 
@@ -380,10 +360,6 @@ public class PanelAdminDeLiga extends JPanel {
             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarActionPerformed
 
@@ -452,18 +428,22 @@ public class PanelAdminDeLiga extends JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTemporadaActionPerformed
 
+    private void btnAdminUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdminUsersActionPerformed
+
+
+        unaInterfazAdministrarLigaDeAmericano.irA();
+    }//GEN-LAST:event_btnAdminUsersActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnAdminUsers;
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBorrar;
     private javax.swing.JCheckBox checkFinalizado;
     private javax.swing.JComboBox<String> comboEquipoLocal;
     private javax.swing.JComboBox<String> comboEquipoVisitante;
     private com.toedter.calendar.JDateChooser dateChooser;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

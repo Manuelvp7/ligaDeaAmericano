@@ -12,15 +12,19 @@ import DAOimpl.PartidoDAOImpl;
 import DAOimpl.ProveedorDAOImpl;
 import DAOimpl.RecorddeequipoDAOImpl;
 import DAOimpl.TiendatienearticuloDAOImpl;
+import interfaces.InterfazAdministrarLigaDeAmericano;
+import interfaces.InterfazLoginControl;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import modelo.Articulo;
 import modelo.Equipo;
@@ -37,7 +41,9 @@ import vista_jpanel.PanelAdminDeMercancia;
  *
  * @author manuel
  */
-public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeAmericano{
+public class ControladorPartido implements InterfazAdministrarLigaDeAmericano{
+    
+    private interfaces.InterfazLoginControl unaInterfazLoginControl;
     
     private Partido unPartido;
     private PartidoDAOImpl unPartidoDAOImpl;
@@ -47,15 +53,26 @@ public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeA
     
     private Connection conn;
     private EquipoDAOImpl unEquipoDAOImpl;
-    Recorddeequipo unRecordDeEquipo;
+    private Recorddeequipo unRecordDeEquipo;
     
-    public ControladorPartido(){
+    private ControladorPersona unControladorPersona;
+                    
+    
+    public ControladorPartido(InterfazLoginControl  unaInterfazLoginControl){
     
                    
         try{
+            
+            
 			
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/lmfa?autoReconnect=true&useSSL=false", "root" , "manolito130");
             if (conn!=null) {
+                
+                this.unaInterfazLoginControl = unaInterfazLoginControl;
+                
+                unControladorPersona = new ControladorPersona();
+                unControladorPersona.setUnaInterfazAdministrarLigaDeAmericano(this);
+                
                 
                 unPartido = new Partido();
                 unRecorddeequipoDAOImpl = new RecorddeequipoDAOImpl();
@@ -92,7 +109,10 @@ public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeA
             
             List<Partido> partidos;
             partidos=unPartidoDAOImpl.load(conn);
-            unPanelAdminDeLiga.actualizarTabla(partidos);
+            if(partidos!=null)
+                unPanelAdminDeLiga.actualizarTabla(partidos);
+             
+                
             
         } catch (SQLException ex) {
             Logger.getLogger(ControladorPartido.class.getName()).log(Level.SEVERE, null, ex);
@@ -128,7 +148,7 @@ public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeA
     }
 
     @Override
-    public void actualizar(String temporada, int noJornada, String equipolocal, String equipovisitante, Date fecha, Date hora,
+    public void actualizar(String temporada, int noJornada, String equipolocal, String equipovisitante, Date fecha, Timestamp hora,
             int ml, int mv,boolean partidoFinalizado) {
         
                     
@@ -258,7 +278,7 @@ public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeA
     }
 
     @Override
-    public void agregar(String temporada, int noJornada, String equipolocal, String equipovisitante, Date fecha, Date hora, boolean partidoFinalizado) {
+    public void agregar(String temporada, int noJornada, String equipolocal, String equipovisitante, Date fecha, Timestamp hora, boolean partidoFinalizado) {
                 
         try {
             
@@ -275,7 +295,27 @@ public class ControladorPartido implements interfaces.InterfazAdministrarLigaDeA
             Logger.getLogger(ControladorPartido.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+
         
+
+    
+
+    @Override
+    public void regresarAlPanelPadre() {
+        
+        unaInterfazLoginControl.cambiarPanel(unPanelAdminDeLiga);
+    }
+
+    @Override
+    public void irA() {
+        
+        unaInterfazLoginControl.cambiarPanel(unControladorPersona.getPanelUsuariosDelSistema());
+        
+    }
+    
+    
+    
         
     
 }

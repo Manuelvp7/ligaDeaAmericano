@@ -24,17 +24,48 @@ import DAO.RecorddeventasDAO;
  */
 public class RecorddeventasDAOImpl implements RecorddeventasDAO {
     /* SQL to insert data */
+    
+    private static final String SQL_SELECT_MONTO_DE_LAS_VENTAS_TIENDA_ANIO_TRIMESTRE =""
+            + "SELECT anio,trimestre,nombreTienda,SUM(monto) AS monto "
+            + "FROM RecordDeVentas  "
+            + "WHERE nombreTienda = ? And anio = ? AND trimestre = ? "
+            + "";
+    
+    private static final String SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_TIENDA =""
+            
+            + "SELECT anio,trimestre,nombreTienda,SUM(monto) AS monto  "
+            + "FROM RecordDeVentas "
+            + "WHERE nombreTienda = ? "
+            + "GROUP BY anio ";
+    
+    private static final String SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_ANIO =""
+            
+            + "SELECT anio,trimestre,nombreTienda,SUM(monto) AS monto "
+            + "FROM RecordDeVentas "
+            + "WHERE anio = ? "
+            + "GROUP BY trimestre ";
+    
+        
+    private static final String SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_TIENDA_Y_ANIO =""
+            
+            + "SELECT anio,trimestre,nombreTienda,SUM(monto) AS monto "
+            + "FROM RecordDeVentas "
+            + "WHERE nombreTienda = ? AND anio = ? "
+            + "GROUP BY trimestre ";
+        
+            
+    private static final String SQL_SELECT =""
+            + "SELECT anio,trimestre,nombreTienda,SUM(monto) AS monto "
+            + "FROM RecordDeVentas "
+            + "GROUP BY nombreTienda";
+
     private static final String SQL_INSERT =
         "INSERT INTO RecordDeVentas ("
         + "nombreTienda, idVenta, anio, trimestre, monto"
         + ") VALUES (?, ?, ?, ?, ?)";
 
     /* SQL to select data */
-    private static final String SQL_SELECT =
-        "SELECT "
-        + "nombreTienda, idVenta, anio, trimestre, monto "
-        + "FROM RecordDeVentas WHERE "
-        + "nombreTienda = ? AND idVenta = ? AND anio = ? AND trimestre = ?";
+
     
     private static final String SQL_COUNT_IDVENTA =""
             + "SELECT COUNT(*) as conteo "
@@ -79,13 +110,89 @@ public class RecorddeventasDAOImpl implements RecorddeventasDAO {
             close(ps);
         }
     }
+    
+    
+        
+    public List<Object[]> loadRecord(String tienda,int anio, int trimestre, int tipoDeBusqueda,Connection conn) throws SQLException{
+     
+
+                   
+        PreparedStatement ps = null;    
+        
+        ResultSet rs = null;
+        try {
+                    
+            switch(tipoDeBusqueda){
+            
+                case 1:{
+
+                    ps = conn.prepareStatement(SQL_SELECT);
+                    break;                    
+                }
+                case 2:{
+                    ps = conn.prepareStatement(SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_ANIO);
+                    ps.setInt(1, anio);
+                    break;
+                }
+                case 3:{
+                    
+                          
+                    ps = conn.prepareStatement(SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_TIENDA);
+                    ps.setString(1, tienda);
+                    break;
+                    
+                }
+                case 4:{
+                    
+                          
+                    ps = conn.prepareStatement(SQL_SELECT_MONTO_DE_LAS_VENTAS_FILTRO_TIENDA_Y_ANIO);
+                    ps.setString(1, tienda);
+                    ps.setInt(2, anio);
+                    break;
+                    
+                   
+                }
+                case 5:{
+                    
+                          
+                    ps = conn.prepareStatement(SQL_SELECT_MONTO_DE_LAS_VENTAS_TIENDA_ANIO_TRIMESTRE);
+                                       
+                    ps.setString(1, tienda);
+                    ps.setInt(2, anio);
+                    ps.setInt(3, trimestre);
+                    break;
+                    
+                }
+                default:{
+                    break;
+                }
+                    
+
+                    
+            }
+            System.out.println("EL STATEMENT DESDE RECORDDEVENTASDAOIMPL "+ps);
+            rs = ps.executeQuery();
+            List results = getResultsRecord(rs);
+            if (results.size() > 0)
+                return results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+        
+    }
 
     /**
      * Retrive a record from Database.
+     * @param store
      * @param beanKey   The PK Object to be retrived.
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+
     public Recorddeventas load(RecorddeventasKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -180,6 +287,20 @@ public class RecorddeventasDAOImpl implements RecorddeventasDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
+        
+    protected List<Object[]> getResultsRecord(ResultSet rs) throws SQLException {
+        List results = new ArrayList<Object[]>();
+        while (rs.next()) {
+            Object[] registro = new Object[4];
+            registro[0]=(rs.getString("nombreTienda"));
+            registro[1]=(rs.getInt("anio"));
+            registro[2]=(rs.getInt("trimestre"));
+            registro[3]=(rs.getDouble("monto"));
+            results.add(registro);
+        }
+        return results;
+    }
+    
     protected List<Recorddeventas> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Recorddeventas>();
         while (rs.next()) {

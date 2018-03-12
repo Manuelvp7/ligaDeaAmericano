@@ -14,6 +14,7 @@ public interface interfazAdministrarEquipo {
     public void cargarProximasFechas(String temporada,String equipo);
     public void cargarTablaDePosiciones(String temporada);
     public void cargarTablaDeResultados(String temporada,String equipo);
-    
+    public void irA(int panel);
+    public void regresarAlPanelPadre();
     
 }

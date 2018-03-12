@@ -10,6 +10,7 @@ import DAOimpl.CategoriaDAOImpl;
 import DAOimpl.JugadorDAOImpl;
 import DAOimpl.PersonaDAOImpl;
 import DAOimpl.ProveedorDAOImpl;
+import DAOimpl.TiendaDAOImpl;
 import DAOimpl.TiendatienearticuloDAOImpl;
 import interfaces.interfazAdministrarMercancia;
 import java.sql.Connection;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import modelo.Articulo;
 import modelo.ArticuloKey;
 import modelo.Categoria;
@@ -26,15 +28,17 @@ import modelo.Proveedor;
 import modelo.Tienda;
 import modelo.Tiendatienearticulo;
 import modelo.TiendatienearticuloKey;
-import vista.PanelAdminDeMercancia;
+
 import vista.panelAdminPlantilla;
+import vista_jpanel.PanelAdminDeMercancia;
 
 /**
  *
  * @author manuel
  */
-public class ControladorArticulo implements interfazAdministrarMercancia{
+public class ControladorPanelAdminDeMercancia implements interfazAdministrarMercancia{
     
+    private interfaces.interfazAdministrarEquipo unaInterfazAdministrarEquipo;
     private Articulo unArticulo;
     private Tienda unaTienda;
     private PanelAdminDeMercancia unPanelAdminDeMercancia;
@@ -43,11 +47,13 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
     private ProveedorDAOImpl unProveedorDAOImpl;
     private TiendatienearticuloDAOImpl unaTiendaTieneArticuloDAO;
     private Tiendatienearticulo unaTiendatienearticulo;
-    Connection conn;
+    private TiendaDAOImpl unaTiendaDaoImpl;
+    private Connection conn;
+    private TiendatienearticuloDAOImpl unaTiendatienearticuloDAOImpl;
     
     
     
-    public ControladorArticulo(){
+    public ControladorPanelAdminDeMercancia(interfaces.interfazAdministrarEquipo unaInterfazAdministrarEquipo){
         
             
         try{
@@ -55,15 +61,20 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/lmfa?autoReconnect=true&useSSL=false", "root" , "manolito130");
             if (conn!=null) {
                 
+                
+                this.unaInterfazAdministrarEquipo = unaInterfazAdministrarEquipo;
                 unArticulo = new Articulo();
                 unaTienda = new Tienda();
                 unPanelAdminDeMercancia = new PanelAdminDeMercancia(this);
                 unArticuloDAOImpl = new ArticuloDAOImpl();
                 unaCategoriaDAOIMpl = new CategoriaDAOImpl();
                 unProveedorDAOImpl = new ProveedorDAOImpl();
-                unaTiendaTieneArticuloDAO = new TiendatienearticuloDAOImpl();
+                unaTiendaDaoImpl = new TiendaDAOImpl();
+                
+                cargarComboDeTiendas();
                 cargarComboCategorias();
                 cargarComboProveedores();
+                buscarProducto(String.valueOf(unPanelAdminDeMercancia.getNombreTienda()),null ,1);
                 cargarTablaMercancia();
                 
             
@@ -94,7 +105,7 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
             unaTiendaTieneArticuloDAO.create(unaTiendatienearticulo, conn);
             cargarTablaMercancia();
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -106,10 +117,17 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
              List<Object[]> articulos;
             String tienda = unPanelAdminDeMercancia.getNombreTienda();
             articulos = unArticuloDAOImpl.load(tienda,conn);
-            unPanelAdminDeMercancia.actualizarTabla(articulos);
+            if(articulos!=null)
+                unPanelAdminDeMercancia.actualizarTabla(articulos);
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+        public void cargarTablaMercancia(List<Object[]> articulos) {   
+            if(articulos!=null)
+                unPanelAdminDeMercancia.actualizarTabla(articulos);
+        
     }
     
     public void cargarComboCategorias(){
@@ -123,7 +141,7 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
             unPanelAdminDeMercancia.cargarComboCategoria(categorias);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
        
@@ -138,7 +156,7 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
             unPanelAdminDeMercancia.cargarComboProveedores(proveedores);
             
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 
@@ -166,7 +184,7 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
             unaTiendaTieneArticuloDAO.delete(key, conn);
             cargarTablaMercancia();
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -186,19 +204,91 @@ public class ControladorArticulo implements interfazAdministrarMercancia{
 
             cargarTablaMercancia();
         } catch (SQLException ex) {
-            Logger.getLogger(ControladorArticulo.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
+ 
             
 
         
     }
 
-
-
- 
+    public void cargarComboDeTiendas(){
+        List<Object[]> registros;
+        try {
+            registros = unaTiendaDaoImpl.loadNombreTiendas(conn);
+            if(registros!=null){
+                
+                unPanelAdminDeMercancia.cargarComboDeTiendas(registros);
+                
+            }
+                
+            else 
+                JOptionPane.showMessageDialog(null,"NO SE ENCONTRARON TIENDAS");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"NO SE ENCONTRARON TIENDAS");
+        }
         
-    
+    }
 
+    public PanelAdminDeMercancia getUnPanelAdminDeMercancia() {
+        return unPanelAdminDeMercancia;
+    }
+    
+        @Override
+    public void buscarProducto(String tienda, String argumentoDeBusqueda, int campo) {
+               try {
+                   List<Object[]> losArticulos;
+                   losArticulos=unArticuloDAOImpl.load(tienda, argumentoDeBusqueda, campo, conn);
+                   cargarTablaMercancia(losArticulos);
+               } catch (SQLException ex) {
+                   Logger.getLogger(ControladorVenta.class.getName()).log(Level.SEVERE, null, ex);
+               }
+    }
+
+
+    
+    @Override
+    
+    public void buscarProducto(String laTienda, String argumentoDeBusqueda1, String argumentoDeBusqueda2, int combinacion) {
+                       
+        try {
+                   
+            List<Object[]> losArticulos;       
+            losArticulos=unArticuloDAOImpl.load(laTienda, argumentoDeBusqueda1, argumentoDeBusqueda2, combinacion, conn);
+            cargarTablaMercancia(losArticulos);
+                   
+               } catch (SQLException ex) {
+                   Logger.getLogger(ControladorVenta.class.getName()).log(Level.SEVERE, null, ex);
+               }
+    }
+       
+
+
+    @Override
+    public void buscarProductoEnTodasLasTiendas(String nombre, String proveedor) {
+        JOptionPane cuadroDeDialogo = new JOptionPane();
+        try {
+            List<Object[]> lasTiendas;
+            ArticuloKey key= new ArticuloKey(nombre,proveedor);       
+            lasTiendas = unaTiendatienearticuloDAOImpl.load(key, conn);
+            if(lasTiendas!=null)
+                JOptionPane.showMessageDialog(null, lasTiendas.toString());
+            else
+                JOptionPane.showMessageDialog(null, "NO SE ENCONTRO EL ARTICULO");
+               } catch (SQLException ex) {
+                   JOptionPane.showMessageDialog(null, "NO SE ENCONTRO EL ARTICULO");
+               }
+    }
+    
+    public void regresar(){
+        
+        unaInterfazAdministrarEquipo.regresarAlPanelPadre();
+        
+        
+    }
+    
     
     
     

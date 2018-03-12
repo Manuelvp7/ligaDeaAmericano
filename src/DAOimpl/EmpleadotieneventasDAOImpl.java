@@ -30,6 +30,65 @@ public class EmpleadotieneventasDAOImpl implements EmpleadotieneventasDAO {
         + ") VALUES (?, ?, ?, ?)";
 
     /* SQL to select data */
+    
+    
+    
+    private static final String SQL_SELECT_NO_FILTRO =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+    + " GROUP BY p.CURP";
+    
+    private static final String SQL_SELECT_POR_TIENDA =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE e.idTienda = ? "
+    + " GROUP BY p.CURP ";
+    
+        
+    private static final String SQL_SELECT_POR_ANIO =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE x.anio = ? "
+    + " GROUP BY p.CURP ";
+        
+                
+
+    private static final String SQL_SELECT_POR_ANIO_Y_TRIMESTRE =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE x.anio = ? AND x.trimestre=? "
+    + " GROUP BY p.CURP";
+    
+            
+    private static final String SQL_SELECT_POR_ANIO_Y_TRIMESTRE_Y_TIENDA =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE x.anio = ? AND x.trimestre=? AND idTienda = ? "
+    + " GROUP BY p.CURP ";
+    
+    private static final String SQL_SELECT_POR_TIENDA_Y_ANIO =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE x.anio = ? AND idTienda = ? "
+    + " GROUP BY p.CURP ";
+    
+        
+    private static final String SQL_SELECT_POR_TRIMESTRE =""
+            + "select e.idTienda,x.anio,x.trimestre,p.nombre,p.paterno,COUNT(x.idVenta) AS VentasTotales "
+    + " FROM Empleado e INNER JOIN EmpleadoTieneVentas x ON e.CURP = vendedorCURP "
+    + "INNER JOIN Persona p ON p.CURP = e.CURP "
+            + "WHERE x.trimestre = ? "
+    + " GROUP BY p.CURP ";
+
+    
+    
+    
     private static final String SQL_SELECT =
         "SELECT "
         + "vendedorCURP, idVenta, anio, trimestre "
@@ -73,6 +132,83 @@ public class EmpleadotieneventasDAOImpl implements EmpleadotieneventasDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+       
+    public List<Object[]> loadResultadosConFiltro(String tienda,int anio,int trimestre,int tipoBusqueda, Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            
+            switch(tipoBusqueda){
+                
+                case 1:{
+                    ps = conn.prepareStatement(SQL_SELECT_NO_FILTRO);
+                    break;
+                }
+                case 2:{
+                    ps = conn.prepareStatement(SQL_SELECT_POR_ANIO);
+                    ps.setInt(1, anio);
+                    break;
+                    
+                }
+                 
+                case 3:{
+                    ps = conn.prepareStatement(SQL_SELECT_POR_TIENDA);
+                    ps.setString(1, tienda);
+                    break;
+                    
+                }
+                case 4:{
+                                       
+                    ps = conn.prepareStatement(SQL_SELECT_POR_ANIO_Y_TRIMESTRE);
+                    ps.setInt(1, anio);
+                    ps.setInt(2, trimestre);
+                    break;
+                    
+                }
+                case 5:{
+                                        
+                    ps = conn.prepareStatement(SQL_SELECT_POR_ANIO_Y_TRIMESTRE_Y_TIENDA);
+                    ps.setInt(1, anio);
+                    ps.setInt(2, trimestre);
+                    ps.setString(3, tienda);
+                    break;
+
+                    
+                }
+                                
+                case 6:{
+                                        
+                    ps = conn.prepareStatement(SQL_SELECT_POR_TIENDA_Y_ANIO);
+                    ps.setInt(1, anio);
+                    
+                    ps.setString(2, tienda);
+                    break;
+
+                    
+                }
+                case 7:{
+                    
+                                       
+                    ps = conn.prepareStatement(SQL_SELECT_POR_TRIMESTRE);
+                    ps.setInt(1, trimestre);
+                }
+                                
+                
+                
+            }
+            System.out.println("STATEMENT DESDE EMPLEADOTIENE VENTASDAOIMPL "+ps);
+            rs = ps.executeQuery();
+            List results = getResultsRecorDeEmpleado(rs);
+            if (results.size() > 0)
+                return  results;
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
     public Empleadotieneventas load(EmpleadotieneventasKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -140,6 +276,26 @@ public class EmpleadotieneventasDAOImpl implements EmpleadotieneventasDAO {
      * @return       The Object to retrieve from DB.
      * @exception    SQLException if something is wrong.
      */
+    
+    
+    protected List<Object[]> getResultsRecorDeEmpleado(ResultSet rs) throws SQLException {
+        List results = new ArrayList<Object[]>();
+        while (rs.next()) {
+            Object[] registro = new Object[6];
+            registro[0]=(rs.getString("idTienda"));
+            registro[1]=(rs.getInt("anio"));
+            registro[2]=(rs.getInt("trimestre"));
+            registro[3]=(rs.getString("nombre"));
+            registro[4]=(rs.getString("paterno"));
+            registro[5]=(rs.getFloat("VentasTotales"));
+
+            results.add(registro);
+        }
+        return results;
+    }
+    
+    
+    
     protected List<Empleadotieneventas> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Empleadotieneventas>();
         while (rs.next()) {
