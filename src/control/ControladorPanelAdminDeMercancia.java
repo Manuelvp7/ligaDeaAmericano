@@ -193,7 +193,7 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
         
         try {
             TiendatienearticuloKey key = new TiendatienearticuloKey(proveedor, nombre, tienda);
-            unaTiendaTieneArticuloDAO.delete(key, conn);
+            unaTiendatienearticuloDAOImpl.delete(key, conn);
             cargarTablaMercancia();
         } catch (SQLException ex) {
             Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
@@ -209,7 +209,7 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
             
             unaTiendatienearticulo = new Tiendatienearticulo(nombre,proveedor,nombreTienda,existencias);  
             System.out.println(unaTiendatienearticulo.toString());
-            unaTiendaTieneArticuloDAO.update(unaTiendatienearticulo, conn);
+            unaTiendatienearticuloDAOImpl.update(unaTiendatienearticulo, conn);
             unArticulo = new Articulo(categoria, proveedor, nombre, precio);
             System.out.println(unArticulo.toString());
             unArticuloDAOImpl.update(unArticulo, conn);
