@@ -157,61 +157,71 @@ public class ControladorPartido implements InterfazAdministrarLigaDeAmericano{
              
             int aux=0;
             
-            RecorddeequipoKey keyLocal = new RecorddeequipoKey(temporada,equipolocal);
-            RecorddeequipoKey keyVisitante = new RecorddeequipoKey(temporada,equipovisitante);
-            
-            Recorddeequipo recordEquipoLocal = new Recorddeequipo();
-            Recorddeequipo recordEquipoVisitante = new Recorddeequipo();
-            
-            recordEquipoLocal = buscarRecordEquipo(keyLocal);
-            recordEquipoVisitante = buscarRecordEquipo(keyVisitante);
+            if(partidoFinalizado){
                 
+                           
+                RecorddeequipoKey keyLocal = new RecorddeequipoKey(temporada,equipolocal);
+                RecorddeequipoKey keyVisitante = new RecorddeequipoKey(temporada,equipovisitante);
+
+                Recorddeequipo recordEquipoLocal = new Recorddeequipo();
+                Recorddeequipo recordEquipoVisitante = new Recorddeequipo();
+
+                recordEquipoLocal = buscarRecordEquipo(keyLocal);
+                recordEquipoVisitante = buscarRecordEquipo(keyVisitante);
+                
+                
+                
+                if(ml>mv){
+                    aux = recordEquipoLocal.getPartidosganados();
+                    recordEquipoLocal.setPartidosganados(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
+
+
+                    aux = recordEquipoVisitante.getPartidosperdidos();
+                    recordEquipoVisitante.setPartidosperdidos(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
+                
+                 }else if(ml<mv){
+                
+
+                    aux = recordEquipoVisitante.getPartidosganados();
+                    recordEquipoVisitante.setPartidosganados(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
+
+
+                    aux = recordEquipoLocal.getPartidosperdidos();
+                    recordEquipoLocal.setPartidosperdidos(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
+
+
+            
+            
+                 }else if(mv==ml){
+                
+                                
+                    aux = recordEquipoVisitante.getPartidosempatados();
+                    recordEquipoVisitante.setPartidosempatados(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
+
+
+                    aux = recordEquipoLocal.getPartidosempatados();
+                    recordEquipoLocal.setPartidosempatados(aux+1);
+                    unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
+                
+
+            
+                 }
+                
+            
+            }
+            
             unPartido = new Partido(temporada, noJornada, equipolocal, equipovisitante, fecha, hora,partidoFinalizado);
             unPartido.setMarcadorlocal(ml);
             unPartido.setMarcadorvisitante(mv);
+            System.out.println("EL PARTIDAZO "+unPartido.toString());
            
             unPartidoDAOImpl.update(unPartido, conn);
-            
-            if(ml>mv){
-                aux = recordEquipoLocal.getPartidosganados();
-                recordEquipoLocal.setPartidosganados(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
-                
-                                
-                aux = recordEquipoVisitante.getPartidosperdidos();
-                recordEquipoVisitante.setPartidosperdidos(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
-                
-            }else if(ml<mv){
-                
-                                
-                aux = recordEquipoVisitante.getPartidosganados();
-                recordEquipoVisitante.setPartidosganados(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
-                
-                                
-                aux = recordEquipoLocal.getPartidosperdidos();
-                recordEquipoLocal.setPartidosperdidos(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
-            
 
-            
-            }else if(mv==ml){
-                
-                                
-                aux = recordEquipoVisitante.getPartidosempatados();
-                recordEquipoVisitante.setPartidosempatados(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoVisitante, conn);
-                
-                                
-                aux = recordEquipoLocal.getPartidosempatados();
-                recordEquipoLocal.setPartidosempatados(aux+1);
-                unRecorddeequipoDAOImpl.update(recordEquipoLocal, conn);
-                
-
-            }
-            
-            
             cargarTablaPartidos();
             
         } catch (SQLException ex) {

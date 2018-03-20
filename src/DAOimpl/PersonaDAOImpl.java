@@ -193,8 +193,8 @@ public class PersonaDAOImpl implements PersonaDAO {
             registro[4]=(rs.getInt("edad"));
             registro[5]=(rs.getDate("fechaNacimiento"));
             registro[6] = rs.getString("nombreUsuario");
-            registro[7] = rs.getString("contrasena");
-            registro[8] = rs.getString("categoriaUsuario");
+            registro[8] = rs.getString("contrasena");
+            registro[7] = rs.getString("categoriaUsuario");
             
             
             results.add(registro);

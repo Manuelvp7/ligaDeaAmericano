@@ -31,6 +31,7 @@ public class PanelAdminDeMercancia extends javax.swing.JPanel {
         
         initComponents();
         modelo = (DefaultTableModel)tableroMercancia.getModel();
+        rbTienda.setSelected(true);
     }
 
     private PanelAdminDeMercancia() {
@@ -382,15 +383,18 @@ public class PanelAdminDeMercancia extends javax.swing.JPanel {
 
                 
         int tipoBusqueda;
-        if(!rbBuscarEnOtrasTiendas.isSelected()&&rbNombre.isSelected()&&rbProveedor.isSelected()&&!rbCategoria.isSelected()){
-            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()), txtNombre.getText(), (String) comboProveedor.getSelectedItem(), 1);
-        }else if(!rbBuscarEnOtrasTiendas.isSelected()&&rbNombre.isSelected()&&!rbProveedor.isSelected()&&!rbCategoria.isSelected()){
-            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()), txtNombre.getText(), 1);
-        }else if(!rbBuscarEnOtrasTiendas.isSelected()&&!rbNombre.isSelected()&&rbProveedor.isSelected()&&!rbCategoria.isSelected()){
-            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()), (String)comboProveedor.getSelectedItem(), 2);
-        }else if(!rbBuscarEnOtrasTiendas.isSelected()&&!rbNombre.isSelected()&&!rbProveedor.isSelected()&&rbCategoria.isSelected()){
-            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()), (String)comboCategoria.getSelectedItem(), 3);
-        }else if(rbBuscarEnOtrasTiendas.isSelected()&&rbNombre.isSelected()&&rbProveedor.isSelected()&&!rbCategoria.isSelected()){
+        if(!rbBuscarEnOtrasTiendas.isSelected()&&rbTienda.isSelected()&&!rbNombre.isSelected()&&!rbProveedor.isSelected()&&!rbCategoria.isSelected()){
+            unaInterfazAdministrarMercancia.buscarProductoEnTienda(String.valueOf(comboDeTiendas.getSelectedItem()));
+        }else if(!rbBuscarEnOtrasTiendas.isSelected()&&rbTienda.isSelected()&&!rbNombre.isSelected()&&rbProveedor.isSelected()&&
+                !rbCategoria.isSelected()){
+            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()),
+                    String.valueOf(comboProveedor.getSelectedItem()), 2);
+        }else if(!rbBuscarEnOtrasTiendas.isSelected()&&rbTienda.isSelected()&&!rbNombre.isSelected()&&!rbProveedor.isSelected()&&
+                rbCategoria.isSelected()){
+            unaInterfazAdministrarMercancia.buscarProducto(String.valueOf(comboDeTiendas.getSelectedItem()), 
+                    (String)comboCategoria.getSelectedItem(), 3);
+        }else if(rbBuscarEnOtrasTiendas.isSelected()&&rbNombre.isSelected()&&rbProveedor.isSelected()&&!rbCategoria.isSelected()
+                &&!rbTienda.isSelected()){
             unaInterfazAdministrarMercancia.buscarProductoEnTodasLasTiendas(txtNombre.getText(), (String) comboProveedor.getSelectedItem());
         }
         
@@ -442,9 +446,9 @@ public void actualizarTabla(List<Object[]> articulos){
 	Object[] registro = new Object[5];
             if (articulos==null) {
                 System.out.println("COCK SUCKER!!");
-            }
-		
-	for(int i=0;i<articulos.size();i++){
+            }else{
+                	
+                for(int i=0;i<articulos.size();i++){
 			
                         registro = articulos.get(i);
                     
@@ -453,6 +457,9 @@ public void actualizarTabla(List<Object[]> articulos){
 			modelo.addRow(registro);
 			
 		}
+            }
+		
+
 		tableroMercancia.setModel(modelo);
 		
         

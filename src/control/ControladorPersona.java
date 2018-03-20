@@ -3,7 +3,9 @@ package control;
 import Conexiones.Conexion;
 import DAO.PersonaDAO;
 import DAOimpl.CategoriausuarioDAOImpl;
+import DAOimpl.EmpleadoDAOImpl;
 import DAOimpl.PersonaDAOImpl;
+import DAOimpl.TiendaDAOImpl;
 import DAOimpl.UsuarioDAOImpl;
 import interfaces.InterfazAdministrarLigaDeAmericano;
 import interfaces.InterfazTableroDeMercado;
@@ -20,6 +22,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoriausuario;
+import modelo.Empleado;
 
 
 import modelo.Persona;
@@ -34,7 +37,7 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
 	private panelAdminUsuarioDelSistema panelUsuariosDelSistema;
 	private Persona unaPersona ;
         private Usuario unUsuario;
-	
+	private Empleado unEmpleado;
         private Conexion conn;
         
         
@@ -43,6 +46,10 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
         private CategoriausuarioDAOImpl unaCategoriausuarioDAOImpl;
         private PersonaDAOImpl personaDAOImpl;
         private UsuarioDAOImpl unUsuarioDAOImpl;
+        private EmpleadoDAOImpl unEmpleadoDAOImpl;
+        private TiendaDAOImpl unaTiendaDAOImpl;
+        
+        
         
             
     
@@ -59,10 +66,14 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
             
             unaPersona = new Persona();
             unUsuarioDAOImpl = new UsuarioDAOImpl();
+            
+            unEmpleadoDAOImpl = new EmpleadoDAOImpl();
             panelUsuariosDelSistema = new panelAdminUsuarioDelSistema(this);
+            unaTiendaDAOImpl = new TiendaDAOImpl();
             personaDAOImpl = new PersonaDAOImpl();
             unaCategoriausuarioDAOImpl = new CategoriausuarioDAOImpl();
             conn = new Conexion();
+            cargarComboDeTiendas();
             cargarTablaPersona();
             cargarComboTipoDeUsuarios();
             
@@ -125,22 +136,42 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
         }
 
     public void agregar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno,int edad, Date fechaNacimiento
-        ,String categoriaUsuario,String userName,String password) {
+        ,String categoriaUsuario,String userName,String password,String tienda) {
         
             try {
                 
                 unaPersona = new Persona(curp,Nombre,ApellidoPaterno,ApellidoMaterno,edad,fechaNacimiento);
                 personaDAOImpl.create(unaPersona, conn.crearConexion());
+                
                 unUsuario = new Usuario();
                 unUsuario.setCategoriausuario(categoriaUsuario);
                 unUsuario.setCurp(curp);
                 unUsuario.setNombreusuario(userName);
                 unUsuario.setContrasena(password);
                 
+                unaTiendaDAOImpl = new TiendaDAOImpl();
+                
                 
                 
                  unUsuarioDAOImpl.create(unUsuario, 
                          conn.crearConexion());
+                 
+
+
+                 if (categoriaUsuario.equals("VENDEDOR")) {
+                     
+                                      
+                     
+                     unEmpleado = new Empleado();
+                 
+                    unEmpleado.setCurp(curp);
+                    unEmpleado.setIdtienda(tienda);
+                    unEmpleadoDAOImpl.create(unEmpleado, conn.crearConexion());
+                }
+
+                
+                //unEmpleadoDAOImpl.update(unEmpleado, conn.crearConexion());
+                cargarTablaPersona();
                 
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
@@ -168,10 +199,33 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
                 Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);
             }
     }
+    
+    
+    
+        public void cargarComboDeTiendas(){
+        List<Object[]> registros;
+        try {
+            registros =
+                    unaTiendaDAOImpl.loadNombreTiendas(conn.crearConexion());
+            if(registros!=null){
+                
+                panelUsuariosDelSistema.cargarComboDeTiendas(registros);
+                
+            }
+                
+            else 
+                JOptionPane.showMessageDialog(null,"NO SE ENCONTRARON TIENDAS");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"NO SE ENCONTRARON TIENDAS");
+        }
+        
+    }
+
+    
 
     @Override
     public void actualizar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad, Date fechaNacimiento
-        ,String categoriaUsuario,String userName,String password) {
+        ,String categoriaUsuario,String userName,String password,String tienda) {
         
         
         
@@ -185,9 +239,31 @@ public class ControladorPersona implements VistaControladorAdministrarUsuarios{
                 unUsuario.setCategoriausuario(categoriaUsuario);
                 unUsuario.setContrasena(password);
                 unUsuario.setCurp(curp);
-                unUsuario.setNombreusuario(Nombre);
+                unUsuario.setNombreusuario(userName);
+                
+                System.out.println("EL USUARIO ACTUALIZADO ES:" + unUsuario.toString());
 
                 unUsuarioDAOImpl.update(unUsuario, conn.crearConexion());
+                
+                unEmpleado = new Empleado();
+                unEmpleado.setCurp(curp);
+                unEmpleado.setIdtienda(tienda);
+                
+//                unEmpleadoDAOImpl.update(unEmpleado, conn.crearConexion());
+                
+                
+                                 
+                if (unUsuario.getCategoriausuario()=="VENDEDOR") {
+                     
+                                      
+                     unEmpleado = new Empleado();
+                 
+                 
+                    unEmpleado.setCurp(curp);
+                    unEmpleado.setIdtienda(tienda);
+                    unEmpleadoDAOImpl.create(unEmpleado, conn.crearConexion());
+                }
+                
                 cargarTablaPersona();
             } catch (SQLException ex) {
                 Logger.getLogger(ControladorPersona.class.getName()).log(Level.SEVERE, null, ex);

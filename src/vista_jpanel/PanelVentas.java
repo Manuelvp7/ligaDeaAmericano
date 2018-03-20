@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Categoria;
+import modelo.Empleado;
 import modelo.Proveedor;
 
 /**
@@ -857,6 +858,13 @@ public class PanelVentas extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "INGRESE UNA CANTIDAD");
         }
         
+    }
+    
+    
+    public void cargarDatosEmpleado(Empleado unEmpleado){
+       
+        lblCURP.setText(unEmpleado.getCurp());
+        lblTienda.setText(unEmpleado.getIdtienda());
     }
     
     

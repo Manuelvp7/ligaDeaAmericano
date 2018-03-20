@@ -49,9 +49,9 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     /* SQL to update data */
     private static final String SQL_UPDATE =
         "UPDATE Usuario SET "
-        + "contrasena = ?, categoriaUsuario = ? "
+        + "contrasena = ?, categoriaUsuario = ?,nombreUsuario = ? "
         + "WHERE "
-        + "CURP = ? AND nombreUsuario = ?";
+        + "CURP = ?";
 
     /* SQL to delete data */
     private static final String SQL_DELETE =
@@ -138,8 +138,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             ps = conn.prepareStatement(SQL_UPDATE);
             ps.setString(1, bean.getContrasena());
             ps.setString(2, bean.getCategoriausuario());
-            ps.setString(3, bean.getCurp());
-            ps.setString(4, bean.getNombreusuario());
+            ps.setString(4, bean.getCurp());
+            ps.setString(3, bean.getNombreusuario());
             ps.executeUpdate();
         }finally {
             close(ps);

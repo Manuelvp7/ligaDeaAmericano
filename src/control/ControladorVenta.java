@@ -3,6 +3,7 @@ package control;
 import DAOimpl.ArticuloDAOImpl;
 import DAOimpl.CategoriaDAOImpl;
 import DAOimpl.DetalledeventaDAOImpl;
+import DAOimpl.EmpleadoDAOImpl;
 import DAOimpl.EmpleadotieneventasDAOImpl;
 import DAOimpl.ProveedorDAOImpl;
 import DAOimpl.RecorddeventasDAOImpl;
@@ -24,8 +25,10 @@ import modelo.ArticuloKey;
 import modelo.Categoria;
 import modelo.Detalledeventa;
 import modelo.Empleado;
+import modelo.EmpleadoKey;
 
 import modelo.Empleadotieneventas;
+import modelo.PersonaKey;
 import modelo.Proveedor;
 import modelo.Recorddeventas;
 import modelo.Tienda;
@@ -48,6 +51,7 @@ public class ControladorVenta implements InterfazDeVentas{
            private Recorddeventas unRecorddeventas;
            private Detalledeventa unDetalledeventa;
            private Tiendatienearticulo unaTiendatienearticulo;
+           private EmpleadoKey unEmpleadoKey;
            
            
            
@@ -62,6 +66,7 @@ public class ControladorVenta implements InterfazDeVentas{
            private TiendatienearticuloDAOImpl unaTiendatienearticuloDAOImpl;
            private RecorddeventasDAOImpl unRecorddeventasDAOImpl;
            private DetalledeventaDAOImpl unDetalledeventaDAOImpl;
+           private EmpleadoDAOImpl unEmpleadoDAOImpl;
            
            
            
@@ -74,7 +79,7 @@ public class ControladorVenta implements InterfazDeVentas{
                    
 	
 	
-	public ControladorVenta() {
+	public ControladorVenta(String CURP) {
 		
                try {
                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/lmfa?autoReconnect=true&useSSL=false", "root" , "manolito130");
@@ -87,6 +92,7 @@ public class ControladorVenta implements InterfazDeVentas{
                        unArticulo  = new Articulo();
                        
                        
+                       
                        //DAOS
                        
                        unEmpleadotieneventasDAOImpl = new EmpleadotieneventasDAOImpl();
@@ -96,10 +102,15 @@ public class ControladorVenta implements InterfazDeVentas{
                        unaTiendatienearticuloDAOImpl = new TiendatienearticuloDAOImpl();
                        unRecorddeventasDAOImpl = new RecorddeventasDAOImpl();
                        unDetalledeventaDAOImpl = new DetalledeventaDAOImpl();
+                       unEmpleadoDAOImpl = new EmpleadoDAOImpl();
+                       
                        
                                               
                        //PANEL
+                       System.out.println("EL CURP "+CURP);
                        unPanelVentas = new PanelVentas(this);
+                       cargarDatosEmpleado(CURP);
+                       
                        
                        cargarComboCategorias();
                        cargarComboProveedores();
@@ -122,6 +133,15 @@ public class ControladorVenta implements InterfazDeVentas{
 
 
 
+        public void cargarDatosEmpleado(String CURP) throws SQLException{
+            
+            Empleado unEmpleado;
+            unEmpleado = unEmpleadoDAOImpl.loadEmpleado(CURP, conn);
+            System.out.println("EL EMPLEADO "+ unEmpleado.toString() );
+            if(unEmpleado!=null)
+                unPanelVentas.cargarDatosEmpleado(unEmpleado);
+            
+        }
 
 
     @Override

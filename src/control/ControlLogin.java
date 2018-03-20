@@ -150,7 +150,7 @@ public class ControlLogin implements InterfazLoginControl{
                 
             }
             case "VENDEDOR":{
-                unControladorVenta = new ControladorVenta();
+                unControladorVenta = new ControladorVenta(CURP);
                 cambiarPanel((JPanel) unControladorVenta.getUnPanelVentas().getContentPane());
                 break;
                 

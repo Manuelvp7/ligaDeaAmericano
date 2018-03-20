@@ -19,6 +19,7 @@ public interface interfazAdministrarMercancia {
     public void buscarProducto(String tienda,String argumentoDeBusqueda,int campo);
     public void buscarProducto(String tienda,String argumentoDeBusqueda1,String argumentoDeBusqueda2, int combinacion);    
     public void buscarProductoEnTodasLasTiendas(String argumentoDeBusqueda1,String argumentoDeBusqueda2);
+    public void buscarProductoEnTienda(String tienda);
     
     public void regresar();
 }

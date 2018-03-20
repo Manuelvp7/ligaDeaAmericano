@@ -26,8 +26,8 @@ public class EmpleadoDAOImpl implements EmpleadoDAO {
     /* SQL to insert data */
     private static final String SQL_INSERT =
         "INSERT INTO Empleado ("
-        + "CURP, puesto, idTienda"
-        + ") VALUES (?, ?, ?)";
+        + "CURP, idTienda"
+        + ") VALUES (?, ?)";
 
     /* SQL to select data */
     private static final String SQL_SELECT =
@@ -35,11 +35,17 @@ public class EmpleadoDAOImpl implements EmpleadoDAO {
         + "CURP, puesto, idTienda "
         + "FROM Empleado WHERE "
         + "CURP = ? AND idTienda = ?";
+    
+        private static final String SQL_SELECT_BY_CURP =
+        "SELECT "
+        + "CURP, idTienda "
+        + "FROM Empleado WHERE "
+        + "CURP = ?";
 
     /* SQL to update data */
     private static final String SQL_UPDATE =
         "UPDATE Empleado SET "
-        + "puesto = ? "
+        + ""
         + "WHERE "
         + "CURP = ? AND idTienda = ?";
 
@@ -59,8 +65,9 @@ public class EmpleadoDAOImpl implements EmpleadoDAO {
         try {
             ps = conn.prepareStatement(SQL_INSERT);
             ps.setString(1, bean.getCurp());
-            ps.setString(2, bean.getPuesto());
-            ps.setString(3, bean.getIdtienda());
+            
+            ps.setString(2, bean.getIdtienda());
+            System.out.println("-----------------INSERSION DE EMPLEADO DESDE EL DAO "+ps);
             ps.executeUpdate();
         }finally {
             close(ps);
@@ -73,6 +80,29 @@ public class EmpleadoDAOImpl implements EmpleadoDAO {
      * @param conn      JDBC Connection.
      * @exception       SQLException if something is wrong.
      */
+    
+       
+    public Empleado loadEmpleado(String  CURP, Connection conn) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            ps = conn.prepareStatement(SQL_SELECT_BY_CURP);
+            ps.setString(1, CURP);
+            System.out.println("EL PS DESDE EL DAO "+ps);
+            
+            rs = ps.executeQuery();
+            List results = getResults(rs);
+            if (results.size() > 0)
+                return (Empleado) results.get(0);
+            else
+                return null;
+        }finally {
+            close(rs);
+            close(ps);
+        }
+    }
+
+    
     public Empleado load(EmpleadoKey key, Connection conn) throws SQLException {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -138,10 +168,12 @@ public class EmpleadoDAOImpl implements EmpleadoDAO {
     protected List<Empleado> getResults(ResultSet rs) throws SQLException {
         List results = new ArrayList<Empleado>();
         while (rs.next()) {
+            System.out.println("SI HAY");
             Empleado bean = new Empleado();
             bean.setCurp(rs.getString("CURP"));
-            bean.setPuesto(rs.getString("puesto"));
+            
             bean.setIdtienda(rs.getString("idTienda"));
+            System.out.println("EL EMPLEADO DESDE EL DAO "+ bean.toString());
             results.add(bean);
         }
         return results;

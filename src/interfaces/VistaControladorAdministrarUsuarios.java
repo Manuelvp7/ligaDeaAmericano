@@ -13,9 +13,10 @@ import java.sql.Date;
 public interface VistaControladorAdministrarUsuarios {
     
     public void agregar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno,
-            int edad,Date fechaNacimiento,String categoriaUsuario,String userName,String Password);
+            int edad,Date fechaNacimiento,String categoriaUsuario,String userName,String Password,String tienda);
     public void borrar(String curp);
-    public void actualizar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad,Date fechaNacimiento,String categoriaUsuario,String userName,String Password);
+    public void actualizar(String curp, String Nombre, String ApellidoPaterno, String ApellidoMaterno, int edad,Date fechaNacimiento,
+            String categoriaUsuario,String userName,String Password,String tienda);
     public void cargarTablaPersona();
     public void regresar();
 }
