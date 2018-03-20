@@ -106,6 +106,7 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
                 
             unaTiendatienearticuloDAOImpl.create(unaTiendatienearticulo, conn);
             cargarTablaMercancia();
+            
         } catch (SQLException ex) {
             Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,7 +132,8 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
         }
     }
     
-        public void cargarTablaMercancia(List<Object[]> articulos) {   
+        
+    public void cargarTablaMercancia(List<Object[]> articulos) {   
             if(articulos!=null)
                 unPanelAdminDeMercancia.actualizarTabla(articulos);
                         
@@ -192,7 +194,7 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
     public void borrar(String proveedor, String nombre, String tienda) {
         
         try {
-            TiendatienearticuloKey key = new TiendatienearticuloKey(proveedor, nombre, tienda);
+            TiendatienearticuloKey key = new TiendatienearticuloKey(tienda, nombre, proveedor);
             unaTiendatienearticuloDAOImpl.delete(key, conn);
             cargarTablaMercancia();
         } catch (SQLException ex) {
@@ -207,14 +209,17 @@ public class ControladorPanelAdminDeMercancia implements interfazAdministrarMerc
             
         try {
             
-            unaTiendatienearticulo = new Tiendatienearticulo(nombre,proveedor,nombreTienda,existencias);  
-            System.out.println(unaTiendatienearticulo.toString());
-            unaTiendatienearticuloDAOImpl.update(unaTiendatienearticulo, conn);
             unArticulo = new Articulo(categoria, proveedor, nombre, precio);
             System.out.println(unArticulo.toString());
             unArticuloDAOImpl.update(unArticulo, conn);
+            
+            unaTiendatienearticulo = new Tiendatienearticulo(nombre,proveedor,nombreTienda,existencias);  
+            System.out.println(unaTiendatienearticulo.toString());
+            unaTiendatienearticuloDAOImpl.update(unaTiendatienearticulo, conn);
+
 
             cargarTablaMercancia();
+            
         } catch (SQLException ex) {
             Logger.getLogger(ControladorPanelAdminDeMercancia.class.getName()).log(Level.SEVERE, null, ex);
         }
